@@ -1,6 +1,10 @@
 require 'optparse'
+require_relative 'modules/ios.rb'
+require_relative 'modules/android.rb'
 
 class Skeleton
+  include IOS
+  include Android
 
   attr_accessor :platform, :udid, :bundle_id, :ios_sim
 
@@ -47,21 +51,6 @@ class Skeleton
 
   def android?
     @platform == 'android'
-  end
-
-  def get_ios_skeleton
-    ios_arch = @ios_sim ? 'iOS Simulator' : 'iOS'
-    page_source = %x(xcodebuild test \
-                    -project Skeleton.xcodeproj \
-                    -scheme Skeleton \
-                    -destination 'platform=#{ios_arch},id=#{@udid}' \
-                    bundle_id="#{@bundle_id}" | \
-                    awk '/start_grep_tag/,/end_grep_tag/')
-  end
-
-  def get_android_skeleton
-    dump = %x(adb -s #{@udid} shell uiautomator dump | egrep -o '/.*?xml')
-    page_source = %x(adb -s #{@udid} shell cat #{dump})
   end
 
 end
