@@ -3,10 +3,6 @@ class IOS
   @@ID = 'AccessibilityId'
   @@LABEL = 'label'
   @@NSPREDICATE = 'iOSNsPredicateString'
-  @@IOS_ELEMENT_TYPES = [
-    'Other', 'Button', 'Switch', 'TextView', 'TextField', 'Table',
-    'Image', 'SecureTextField', 'StaticText', 'NavigationBar', 'Cell'
-  ]
 
   attr_accessor :platform, :udid, :bundle_id, :ios_sim, :dir
 
@@ -19,25 +15,13 @@ class IOS
   end
 
   def skeletoner
-    id_locators = {}
-    nspredicate_locators = {}
-    get_page_source.each_line do |line|
-      break if line.include?(' StatusBar, ')
-      element_type = get_element_type(line)
-      if @@IOS_ELEMENT_TYPES.include?(element_type)
-        locator = get_locator_via_id(line)
-        locator.empty? || id_locators[locator] = element_type
-        locator = get_locator_via_label(line)
-        locator.empty? || nspredicate_locators[locator] = element_type
-      end
-    end
-
+    page_source = get_page_source
+    id_locators = get_id_locators_from(page_source)
+    nspredicate_locators = get_nspredicate_locators_from(page_source)
     id_locators.each_key do |locator|
       method_name = camel_style(locator.strip)
-      puts method_name
       create_page_objects(method_name, @@ID, locator)
     end
-
     i = 0
     nspredicate_locators.each do |locator, type|
       i += 1
@@ -48,6 +32,28 @@ class IOS
   end
 
   private
+
+  def get_id_locators_from(page_source)
+    locators = {}
+    page_source.each_line do |line|
+      break if line.include?(' StatusBar, ')
+      next  if line.include?('Application, ')
+      locator = get_locator_via_id(line)
+      locator.empty? || locators[locator] = get_element_type(line)
+    end
+    locators
+  end
+
+  def get_nspredicate_locators_from(page_source)
+    locators = {}
+    page_source.each_line do |line|
+      break if line.include?(' StatusBar, ')
+      next  if line.include?('Application, ')
+      locator = get_locator_via_label(line)
+      locator.empty? || locators[locator] = get_element_type(line)
+    end
+    locators
+  end
 
   def snake_style(method_name) #: FIXME
     method_name[0] = method_name[0].downcase
