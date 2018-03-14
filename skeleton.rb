@@ -16,7 +16,7 @@ class Skeleton
   end
 
   def platform=(platform)
-    platform.downcase! if not platform.nil?
+    platform.nil? || platform.downcase!
     if platform != 'ios' && platform != 'android'
       raise 'Set platform, ios or android [-p arg]'
     end
