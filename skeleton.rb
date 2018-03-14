@@ -1,18 +1,18 @@
 require 'optparse'
 require 'fileutils'
-require_relative 'modules/ios.rb'
-require_relative 'modules/android.rb'
+require_relative 'bin/ios.rb'
+require_relative 'bin/android.rb'
 
 class Skeleton
-  include IOS
-  include Android
-  attr_accessor :platform, :udid, :bundle_id, :ios_sim
+  attr_accessor :platform, :udid, :bundle_id, :ios_sim, :dir
 
   def initialize(options)
     self.platform = options[:platform]
     self.udid = options[:udid]
     self.ios_sim = options[:ios_sim]
     self.bundle_id = options[:bundle_id]
+    self.dir = options[:dir]
+    @driver = ios? ? IOS.new(options) : Android.new(options)
   end
 
   def platform=(platform)
@@ -39,11 +39,7 @@ class Skeleton
 
   def start
     precondition
-    if ios?
-      get_ios_skeleton
-    elsif android?
-      get_android_skeleton
-    end
+    @driver.skeletoner
   end
 
   def ios?
@@ -55,12 +51,12 @@ class Skeleton
   end
 
   def precondition
-    FileUtils.mkdir_p(@@PAGEOBJECT_DIR)
-    FileUtils.rm_f("#{@@PAGEOBJECT_DIR}/#{@platform}.java")
+    FileUtils.mkdir_p(@dir)
+    FileUtils.rm_f("#{@dir}/#{@platform}_#{(Time.now.to_f * 1000).to_i}.java")
   end
 end
 
-options = {:ios_sim => false}
+options = {:dir => 'PageObject'}
 ARGV.options do |opts|
   opts.on('-u',
   				'--udid=val',

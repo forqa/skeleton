@@ -1,21 +1,30 @@
-module IOS
-  @@PAGEOBJECT_DIR = 'PageObject'
+class IOS
   @@IOS_ELEMENT_TYPES = [
     'Other', 'Button', 'StaticText', 'Switch', 'TextView', 'TextField', 'Image'
   ]
 
-  def get_ios_skeleton
+  attr_accessor :platform, :udid, :bundle_id, :ios_sim, :dir
+
+  def initialize(options)
+    self.platform = options[:platform]
+    self.udid = options[:udid]
+    self.ios_sim = options[:ios_sim]
+    self.bundle_id = options[:bundle_id]
+    self.dir = options[:dir]
+  end
+
+  def skeletoner
     locators = {}
     i = 0
     get_page_source.each_line do |line|
       element_type = get_element_type(line)
-      if @@IOS_ELEMENT_TYPES.include?(element_type)
+      if @dir.include?(element_type)
         locator = get_element_locator(line)
         locators[locator] = element_type if not locator.empty?
       end
     end
 
-    locators.each_key do |el|
+    locators.each do |el, type|
       create_page_objects(el.strip, 'AccessibilityId', el)
     end
   end
