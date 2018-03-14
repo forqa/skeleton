@@ -52,7 +52,6 @@ class Skeleton
 
   def precondition
     FileUtils.mkdir_p(@dir)
-    FileUtils.rm_f("#{@dir}/#{@platform}_#{(Time.now.to_f * 1000).to_i}.java")
   end
 end
 

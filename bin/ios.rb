@@ -61,7 +61,8 @@ class IOS
   end
 
   def create_page_objects(name, locator_type, value)
-    File.open("#{@@PAGEOBJECT_DIR}/#{@platform}.java", 'a') do |f|
+    timestamp = (Time.now.to_f * 1000).to_i
+    File.open("#{@dir}/#{@platform}_#{timestamp}.java", 'a') do |f|
       f.write(get_java_method(name, locator_type, value))
     end
   end
