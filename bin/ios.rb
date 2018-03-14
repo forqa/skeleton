@@ -1,4 +1,5 @@
 class IOS
+  @@TIMESTAMP = (Time.now.to_f * 1000).to_i
   @@IOS_ELEMENT_TYPES = [
     'Other', 'Button', 'StaticText', 'Switch', 'TextView', 'TextField', 'Image'
   ]
@@ -18,7 +19,7 @@ class IOS
     i = 0
     get_page_source.each_line do |line|
       element_type = get_element_type(line)
-      if @dir.include?(element_type)
+      if @@IOS_ELEMENT_TYPES.include?(element_type)
         locator = get_element_locator(line)
         locators[locator] = element_type if not locator.empty?
       end
@@ -61,8 +62,7 @@ class IOS
   end
 
   def create_page_objects(name, locator_type, value)
-    timestamp = (Time.now.to_f * 1000).to_i
-    File.open("#{@dir}/#{@platform}_#{timestamp}.java", 'a') do |f|
+    File.open("#{@dir}/#{@platform}_#{@@TIMESTAMP}.java", 'a') do |f|
       f.write(get_java_method(name, locator_type, value))
     end
   end
