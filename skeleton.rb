@@ -1,11 +1,11 @@
 require 'optparse'
+require 'fileutils'
 require_relative 'modules/ios.rb'
 require_relative 'modules/android.rb'
 
 class Skeleton
   include IOS
   include Android
-
   attr_accessor :platform, :udid, :bundle_id, :ios_sim
 
   def initialize(options)
@@ -17,7 +17,7 @@ class Skeleton
 
   def platform=(platform)
     platform.downcase! if not platform.nil?
-    if (platform != 'ios' && platform != 'android')
+    if platform != 'ios' && platform != 'android'
       raise 'Set platform, ios or android [-p arg]'
     end
     @platform = platform
@@ -38,6 +38,7 @@ class Skeleton
   end
 
   def start
+    precondition
     if ios?
       get_ios_skeleton
     elsif android?
@@ -53,6 +54,10 @@ class Skeleton
     @platform == 'android'
   end
 
+  def precondition
+    FileUtils.mkdir_p(@@PAGEOBJECT_DIR)
+    FileUtils.rm_f("#{@@PAGEOBJECT_DIR}/#{@platform}.java")
+  end
 end
 
 options = {:ios_sim => false}
