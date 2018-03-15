@@ -1,7 +1,7 @@
 class IOS < Base
-  @@ID = 'AccessibilityId'
-  @@LABEL = 'label'
-  @@NSPREDICATE = 'iOSNsPredicateString'
+  ID = 'AccessibilityId'
+  LABEL = 'label'
+  NSPREDICATE = 'iOSNsPredicateString'
 
   attr_accessor :platform, :udid, :bundle_id, :ios_sim, :dir
 
@@ -19,14 +19,14 @@ class IOS < Base
     nspredicate_locators = get_nspredicate_locators_from(page_source)
     id_locators.each_key do |locator|
       method_name = camel_style(locator.strip)
-      create_page_objects(method_name, @@ID, locator)
+      create_page_objects(method_name, ID, locator)
     end
     i = 0
     nspredicate_locators.each do |locator, type|
       i += 1
       method_name = type + i.to_s
       method_name[0] = method_name[0].downcase
-      create_page_objects(method_name, @@NSPREDICATE, locator)
+      create_page_objects(method_name, NSPREDICATE, locator)
     end
   end
 
@@ -70,7 +70,7 @@ class IOS < Base
   end
 
   def get_java_method(name, locator_type, value)
-    if locator_type == @@ID
+    if locator_type == ID
       "By #{name}() {\n\treturn " +
         "MobileBy.#{locator_type}(\"#{value}\");\n}\n\n"
     else
@@ -80,7 +80,7 @@ class IOS < Base
   end
 
   def create_page_objects(name, locator_type, value)
-    File.open("#{@dir}/#{@platform}_#{@@TIMESTAMP}.java", 'a') do |f|
+    File.open("#{@dir}/#{@platform}_#{TIMESTAMP}.java", 'a') do |f|
       f.write(get_java_method(name, locator_type, value))
     end
   end
