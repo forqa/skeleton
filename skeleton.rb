@@ -1,5 +1,6 @@
 require 'optparse'
 require 'fileutils'
+require_relative 'bin/base.rb'
 require_relative 'bin/ios.rb'
 require_relative 'bin/android.rb'
 

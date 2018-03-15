@@ -1,5 +1,4 @@
-class IOS
-  @@TIMESTAMP = (Time.now.to_f * 1000).to_i
+class IOS < Base
   @@ID = 'AccessibilityId'
   @@LABEL = 'label'
   @@NSPREDICATE = 'iOSNsPredicateString'
@@ -19,7 +18,7 @@ class IOS
     id_locators = get_id_locators_from(page_source)
     nspredicate_locators = get_nspredicate_locators_from(page_source)
     id_locators.each_key do |locator|
-      method_name = snake_style(locator.strip)
+      method_name = camel_style(locator.strip)
       create_page_objects(method_name, @@ID, locator)
     end
     i = 0
@@ -55,47 +54,6 @@ class IOS
     locators
   end
 
-  def snake_style(method_name)
-    method_name[0] = method_name[0].downcase
-    method_name.each_char.with_index do |char, char_i|
-      method_name[char_i] =
-        if char == ' ' || char == '-'
-          '_'
-        elsif /[A-Z]/.match(method_name[char_i])
-          if method_name[char_i - 1] != '_'
-            '_' + method_name[char_i].downcase
-          else
-            method_name[char_i].downcase
-          end
-        else
-          method_name[char_i]
-        end
-    end
-  end
-
-  def camel_style(method_name)
-    space_i = 0
-    method_name[0] = method_name[0].downcase
-    method_name.each_char.with_index do |char, char_i|
-      if char == ' ' || char == '_' || char == '-'
-        method_name[char_i - space_i] = ''
-        method_name[char_i - space_i] =
-          method_name[char_i - space_i].capitalize
-        space_i += 1
-      end
-    end
-  end
-
-  def get_page_source
-    ios_arch = @ios_sim ? 'iOS Simulator' : 'iOS'
-    %x(xcodebuild test \
-      -project Skeleton.xcodeproj \
-      -scheme Skeleton \
-      -destination 'platform=#{ios_arch},id=#{@udid}' \
-      bundle_id="#{@bundle_id}" | \
-      awk '/start_grep_tag/,/end_grep_tag/')
-  end
-
   def get_element_type(line)
     line_first_word = line.split.first
     line_first_word.nil? ? '' : line_first_word.chomp(',')
@@ -125,5 +83,15 @@ class IOS
     File.open("#{@dir}/#{@platform}_#{@@TIMESTAMP}.java", 'a') do |f|
       f.write(get_java_method(name, locator_type, value))
     end
+  end
+
+  def get_page_source
+    ios_arch = @ios_sim ? 'iOS Simulator' : 'iOS'
+    %x(xcodebuild test \
+      -project Skeleton.xcodeproj \
+      -scheme Skeleton \
+      -destination 'platform=#{ios_arch},id=#{@udid}' \
+      bundle_id="#{@bundle_id}" | \
+      awk '/start_grep_tag/,/end_grep_tag/')
   end
 end
