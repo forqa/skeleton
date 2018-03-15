@@ -19,7 +19,7 @@ class IOS
     id_locators = get_id_locators_from(page_source)
     nspredicate_locators = get_nspredicate_locators_from(page_source)
     id_locators.each_key do |locator|
-      method_name = camel_style(locator.strip)
+      method_name = snake_style(locator.strip)
       create_page_objects(method_name, @@ID, locator)
     end
     i = 0
@@ -55,15 +55,21 @@ class IOS
     locators
   end
 
-  def snake_style(method_name) #: FIXME
+  def snake_style(method_name)
     method_name[0] = method_name[0].downcase
     method_name.each_char.with_index do |char, char_i|
-      if char == ' '
-        method_name[char_i] = '_'
-      elsif /[A-Z]/.match(method_name[char_i + 1])
-        method_name[char_i + 2] = method_name[char_i + 1].downcase
-        method_name[char_i + 1] = '_'
-      end
+      method_name[char_i] =
+        if char == ' ' || char == '-'
+          '_'
+        elsif /[A-Z]/.match(method_name[char_i])
+          if method_name[char_i - 1] != '_'
+            '_' + method_name[char_i].downcase
+          else
+            method_name[char_i].downcase
+          end
+        else
+          method_name[char_i]
+        end
     end
   end
 
@@ -71,7 +77,7 @@ class IOS
     space_i = 0
     method_name[0] = method_name[0].downcase
     method_name.each_char.with_index do |char, char_i|
-      if char == ' '
+      if char == ' ' || char == '_' || char == '-'
         method_name[char_i - space_i] = ''
         method_name[char_i - space_i] =
           method_name[char_i - space_i].capitalize
