@@ -23,7 +23,7 @@ class Android < Base
   def create_locator_by_resouce_id(line)
     name = line[RESOURCE_ID]
     name.slice!(/.*id\//)
-    add_locator_to_page_objects(camel_style(name), ID, line[RESOURCE_ID])
+    add_new_page_object(camel_style(name), ID, line[RESOURCE_ID])
   end
 
   def create_locator_by_content_desc(line)
@@ -31,7 +31,7 @@ class Android < Base
     name = "#{line[CLASS]}#{@@locator_index}"
     name.slice!(/.*\./)
     locator = "//#{line[CLASS]}[@#{CONTENT_DESC}='#{line[CONTENT_DESC]}']"
-    add_locator_to_page_objects(camel_style(name), XPATH, locator)
+    add_new_page_object(camel_style(name), XPATH, locator)
   end
 
   def create_locator_by_text(line)
@@ -39,7 +39,7 @@ class Android < Base
     name = "#{line[CLASS]}#{@@locator_index}"
     name.slice!(/.*\./)
     locator = "//#{line[CLASS]}[@#{TEXT}='#{line[TEXT]}'"
-    add_locator_to_page_objects(camel_style(name), XPATH, locator)
+    add_new_page_object(camel_style(name), XPATH, locator)
   end
 
   def create_locator(line)
@@ -61,7 +61,7 @@ class Android < Base
     "By #{name}() {\n\treturn MobileBy.#{locator_type}(\"#{value}\");\n}\n\n"
   end
 
-  def add_locator_to_page_objects(name, locator_type, value)
+  def add_new_page_object(name, locator_type, value)
     File.open("#{@dir}/#{@platform}_#{TIMESTAMP}.java", 'a') do |f|
       f.write(get_java_method(name, locator_type, value))
     end

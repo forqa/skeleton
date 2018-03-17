@@ -1,4 +1,8 @@
+require_relative 'languages.rb'
+
 class Base
+  include Language
+
   TIMESTAMP = (Time.now.to_f * 1000).to_i
   @@locator_index = 0
 
