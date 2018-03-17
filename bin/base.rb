@@ -8,6 +8,7 @@ class Base
 
   def snake_style(method_name)
     method_name[0] = method_name[0].downcase
+    method_name.squeeze!('_')  
     method_name.each_char.with_index do |char, char_i|
       method_name[char_i] =
         if char == ' ' || char == '-'
