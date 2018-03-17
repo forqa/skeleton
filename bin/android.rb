@@ -1,10 +1,10 @@
 class Android < Base
-  @@RESOURCE_ID = "resource-id"
-  @@CONTENT_DESC = "content-desc"
-  @@TEXT = "text"
-  @@ID = "id"
-  @@XPATH = "xpath"
-  @@CLASS = "class"
+  RESOURCE_ID = "resource-id"
+  CONTENT_DESC = "content-desc"
+  TEXT = "text"
+  ID = "id"
+  XPATH = "xpath"
+  CLASS = "class"
 
   attr_accessor :platform, :udid, :bundle_id, :ios_sim, :dir
 
@@ -15,45 +15,46 @@ class Android < Base
   end
 
   def skeletoner
-    dump = %x(adb -s #{@udid} shell uiautomator dump | egrep -o '/.*?xml')
-    page_source = %x(adb -s #{@udid} shell cat #{dump})  
-    create_page_objects(page_source)  
+    create_page_objects(get_page_source)
   end
-
 
   private
 
-  def create_locator_by_resouce_id(element)
-    name = element[@@RESOURCE_ID]
+  def create_locator_by_resouce_id(line)
+    name = line[RESOURCE_ID]
     name.slice!(/.*id\//)
-    add_locator_to_page_objects(name, @@ID, element[@@RESOURCE_ID])
+    add_locator_to_page_objects(camel_style(name), ID, line[RESOURCE_ID])
   end
 
-  def create_locator_by_content_desc(element)
-    name = element[@@CONTENT_DESC]
-    name.slice!(/.*id\//)
-    locator = "//#{element[@@CLASS]}[@#{@@CONTENT_DESC}='#{element[@@CONTENT_DESC]}']"
-    add_locator_to_page_objects(name, @@XPATH, locator)
-  end
-
-  def create_locator_by_text(element)
-    name = element[@@CLASS]
+  def create_locator_by_content_desc(line)
+    @@locator_index += 1
+    name = "#{line[CLASS]}#{@@locator_index}"
     name.slice!(/.*\./)
-    locator = "//#{element[@@CLASS]}[@#{@@TEXT}='#{element[@@TEXT]}'"
-    add_locator_to_page_objects(name, @@XPATH, locator)
+    locator = "//#{line[CLASS]}[@#{CONTENT_DESC}='#{line[CONTENT_DESC]}']"
+    add_locator_to_page_objects(camel_style(name), XPATH, locator)
   end
 
-  def create_locator(element)
-    !element[@@RESOURCE_ID].empty? && create_locator_by_resouce_id(element) and
-    !element[@@CONTENT_DESC].empty? && create_locator_by_content_desc(element) and
-    !element[@@TEXT].empty? && create_locator_by_text(element)
+  def create_locator_by_text(line)
+    @@locator_index += 1
+    name = "#{line[CLASS]}#{@@locator_index}"
+    name.slice!(/.*\./)
+    locator = "//#{line[CLASS]}[@#{TEXT}='#{line[TEXT]}'"
+    add_locator_to_page_objects(camel_style(name), XPATH, locator)
+  end
+
+  def create_locator(line)
+    if !line[RESOURCE_ID].empty?
+      create_locator_by_resouce_id(line)
+    elsif !line[CONTENT_DESC].empty?
+      create_locator_by_content_desc(line)
+    elsif !line[TEXT].empty?
+      create_locator_by_text(line)
+    end
   end
 
   def create_page_objects(page_source)
-    doc = Nokogiri::HTML.parse(page_source)
-    doc.css('node').map {|element|
-      create_locator(element)
-    }
+    page_source_html = Nokogiri::HTML.parse(page_source)
+    page_source_html.css('node').each { |line| create_locator(line) }
   end
 
   def get_java_method(name, locator_type, value)
@@ -61,10 +62,14 @@ class Android < Base
   end
 
   def add_locator_to_page_objects(name, locator_type, value)
-    File.open("#{@dir}/#{@platform}_#{@@TIMESTAMP}.java", 'a') do |f|
+    File.open("#{@dir}/#{@platform}_#{TIMESTAMP}.java", 'a') do |f|
       f.write(get_java_method(name, locator_type, value))
     end
   end
-  
+
+  def get_page_source
+    dump = `adb -s #{@udid} shell uiautomator dump | egrep -o '/.*?xml'`
+    `adb -s #{@udid} shell cat #{dump}`
+  end
 
 end

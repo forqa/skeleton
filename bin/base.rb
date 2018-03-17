@@ -1,5 +1,6 @@
 class Base
   TIMESTAMP = (Time.now.to_f * 1000).to_i
+  @@locator_index = 0
 
   def snake_style(method_name)
     method_name[0] = method_name[0].downcase
