@@ -1,9 +1,11 @@
 class IOS < Base
-  ACC_ID = { java: 'AccessibilityId',
-             ruby: 'accessibility_id'
+  ACC_ID = {
+             java: :AccessibilityId,
+             ruby: :accessibility_id
            }
-  NSPREDICATE = { java: 'iOSNsPredicateString',
-                  ruby: 'predicate'
+  NSPREDICATE = {
+                  java: :iOSNsPredicateString,
+                  ruby: :predicate
                 }
   IDENTIFIER = 'identifier'
   LABEL = 'label'
@@ -91,7 +93,7 @@ class IOS < Base
   def ruby(method_name, locator_type, value)
     <<~RUBY
       def #{snake_style(method_name)}
-        #{locator_type[:ruby]}("#{value}")
+        return :#{locator_type[:ruby]}, "#{value}"
       end
 
     RUBY
@@ -104,11 +106,14 @@ class IOS < Base
   end
 
   def page_source
+    results_dir = 'attach'
+    FileUtils.rm_rf(results_dir)
     ios_arch = @ios_sim ? 'iOS Simulator' : 'iOS'
     %x(xcodebuild test \
       -project Skeleton.xcodeproj \
       -scheme Skeleton \
       -destination 'platform=#{ios_arch},id=#{@udid}' \
+      -resultBundlePath #{results_dir} \
       bundle_id="#{@bundle_id}" | \
       awk '/start_grep_tag/,/end_grep_tag/')
   end
