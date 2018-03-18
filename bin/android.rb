@@ -23,7 +23,7 @@ class Android < Base
   def create_locator_by_resouce_id(line)
     name = line[RESOURCE_ID]
     name.slice!(/.*id\//)
-    add_new_page_object(camel_style(name), ID, line[RESOURCE_ID])
+    code_generation(name, ID, line[RESOURCE_ID])
   end
 
   def create_locator_by_content_desc(line)
@@ -31,7 +31,7 @@ class Android < Base
     name = "#{line[CLASS]}#{@@locator_index}"
     name.slice!(/.*\./)
     locator = "//#{line[CLASS]}[@#{CONTENT_DESC}='#{line[CONTENT_DESC]}']"
-    add_new_page_object(camel_style(name), XPATH, locator)
+    code_generation(name, XPATH, locator)
   end
 
   def create_locator_by_text(line)
@@ -39,7 +39,7 @@ class Android < Base
     name = "#{line[CLASS]}#{@@locator_index}"
     name.slice!(/.*\./)
     locator = "//#{line[CLASS]}[@#{TEXT}='#{line[TEXT]}'"
-    add_new_page_object(camel_style(name), XPATH, locator)
+    code_generation(name, XPATH, locator)
   end
 
   def create_locator(line)
@@ -57,13 +57,25 @@ class Android < Base
     page_source_html.css('node').each { |line| create_locator(line) }
   end
 
-  def get_java_method(name, locator_type, value)
-    "By #{name}() {\n\treturn MobileBy.#{locator_type}(\"#{value}\");\n}\n\n"
+  def code_generation(method_name, locator_type, value)
+    java = java(method_name, locator_type, value)
+    add_new_page_object(java, Language::RUBY)
+
+    # ADD OTHER LANGUAGES HERE
   end
 
-  def add_new_page_object(name, locator_type, value)
-    File.open("#{@dir}/#{@platform}_#{TIMESTAMP}.java", 'a') do |f|
-      f.write(get_java_method(name, locator_type, value))
+  def java(method_name, locator_type, value)
+    <<~JAVA
+      By #{camel_style(method_name)}() {
+        return MobileBy.#{locator_type}("#{value}");
+      }
+
+    JAVA
+  end
+
+  def add_new_page_object(code, lan)
+    File.open("#{@dir}/#{@platform}_#{TIMESTAMP}.#{lan}", 'a') do |f|
+      f.write(code)
     end
   end
 
