@@ -4,11 +4,9 @@ class Base
   include Language
 
   TIMESTAMP = (Time.now.to_f * 1000).to_i
-  @@locator_index = 0
 
   def snake_style(method_name)
     method_name[0] = method_name[0].downcase
-    method_name.squeeze!('_')  
     method_name.each_char.with_index do |char, char_i|
       method_name[char_i] =
         if char == ' ' || char == '-'
@@ -23,6 +21,7 @@ class Base
           method_name[char_i]
         end
     end
+    method_name.squeeze('_')
   end
 
   def camel_style(method_name)
@@ -36,6 +35,10 @@ class Base
         space_i += 1
       end
     end
+  end
+
+  def increment_locator_id
+    @locator_index = @locator_index.nil? ? 1 : @locator_index + 1
   end
 
   def get_page_source

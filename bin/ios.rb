@@ -43,8 +43,7 @@ class IOS < Base
   end
 
   def create_locator_by_label(locator, type)
-    @@locator_index += 1
-    method_name = "#{type}#{@@locator_index}"
+    method_name = "#{type}#{increment_locator_id}"
     locator = "#{LABEL} like '#{locator}'"
     code_generation(method_name, NSPREDICATE, locator)
   end

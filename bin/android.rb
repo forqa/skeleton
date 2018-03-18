@@ -21,25 +21,23 @@ class Android < Base
   private
 
   def create_locator_by_resouce_id(line)
-    name = line[RESOURCE_ID]
-    name.slice!(/.*id\//)
-    code_generation(name, ID, line[RESOURCE_ID])
+    method_name = line[RESOURCE_ID]
+    method_name.slice!(/.*id\//)
+    code_generation(method_name, ID, line[RESOURCE_ID])
   end
 
   def create_locator_by_content_desc(line)
-    @@locator_index += 1
-    name = "#{line[CLASS]}#{@@locator_index}"
-    name.slice!(/.*\./)
+    method_name = "#{line[CLASS]}#{increment_locator_id}"
+    method_name.slice!(/.*\./)
     locator = "//#{line[CLASS]}[@#{CONTENT_DESC}='#{line[CONTENT_DESC]}']"
-    code_generation(name, XPATH, locator)
+    code_generation(method_name, XPATH, locator)
   end
 
   def create_locator_by_text(line)
-    @@locator_index += 1
-    name = "#{line[CLASS]}#{@@locator_index}"
-    name.slice!(/.*\./)
+    method_name = "#{line[CLASS]}#{increment_locator_id}"
+    method_name.slice!(/.*\./)
     locator = "//#{line[CLASS]}[@#{TEXT}='#{line[TEXT]}'"
-    code_generation(name, XPATH, locator)
+    code_generation(method_name, XPATH, locator)
   end
 
   def create_locator(line)
@@ -59,7 +57,7 @@ class Android < Base
 
   def code_generation(method_name, locator_type, value)
     java = java(method_name, locator_type, value)
-    add_new_page_object(java, Language::RUBY)
+    add_new_page_object(java, Language::JAVA)
 
     # ADD OTHER LANGUAGES HERE
   end
