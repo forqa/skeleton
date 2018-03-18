@@ -1,8 +1,12 @@
 class IOS < Base
-  ACC_ID = 'AccessibilityId'
+  ACC_ID = { java: 'AccessibilityId',
+             ruby: 'accessibility_id'
+           }
+  NSPREDICATE = { java: 'iOSNsPredicateString',
+                  ruby: 'predicate'
+                }
   IDENTIFIER = 'identifier'
   LABEL = 'label'
-  NSPREDICATE = 'iOSNsPredicateString'
 
   attr_accessor :platform, :udid, :bundle_id, :ios_sim, :dir
 
@@ -68,7 +72,9 @@ class IOS < Base
 
   def code_generation(method_name, locator_type, value)
     java = java(method_name, locator_type, value)
-    add_new_page_object(java, Language::RUBY)
+    ruby = ruby(method_name, locator_type, value)
+    add_new_page_object(java, Language::JAVA)
+    add_new_page_object(ruby, Language::RUBY)
 
     # ADD OTHER LANGUAGES HERE
   end
@@ -76,10 +82,19 @@ class IOS < Base
   def java(method_name, locator_type, value)
     <<~JAVA
       By #{camel_style(method_name)}() {
-        return MobileBy.#{locator_type}("#{value}");
+        return MobileBy.#{locator_type[:java]}("#{value}");
       }
 
     JAVA
+  end
+
+  def ruby(method_name, locator_type, value)
+    <<~RUBY
+      def #{snake_style(method_name)}
+        #{locator_type[:ruby]}("#{value}")
+      end
+
+    RUBY
   end
 
   def add_new_page_object(code, lan)
