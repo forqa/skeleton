@@ -12,8 +12,6 @@ class Android < Base
   XPATH = 'xpath'
   CLASS = 'class'
 
-
-
   attr_accessor :platform, :udid, :bundle_id, :ios_sim
 
   def initialize(options)
@@ -22,8 +20,9 @@ class Android < Base
   end
 
   def skeletoner
-    screenshot
-    create_page_objects(page_source)
+    create_page_objects
+    save_screenshot
+    save(page_source)
   end
 
   private
@@ -58,33 +57,35 @@ class Android < Base
     end
   end
 
-  def create_page_objects(page_source)
+  def create_page_objects
     page_source_html = Nokogiri::HTML.parse(page_source)
     page_source_html.css('node').each { |line| create_locator(line) }
   end
 
   def code_generation(method_name, locator_type, value)
     java = java(method_name, locator_type, value)
-    add_new_page_object(java, Language::JAVA)
+    save(java, lang: Language::JAVA)
 
     # ADD OTHER LANGUAGES HERE
   end
 
-  def add_new_page_object(code, lan)
-    file_path = "#{PAGE_OBJECTS_FOLDER}/#{@platform}_#{TIMESTAMP}.#{lan}"
+  def save(code, lang: 'xml')
+    file_path = "#{PAGE_OBJECTS_FOLDER}/#{@platform}_#{TIMESTAMP}.#{lang}"
     File.open(file_path, 'a') { |f| f.write(code) }
   end
 
   def page_source
-    dump = `adb -s #{@udid} shell uiautomator dump | egrep -o '/.*?xml'`
-    `adb -s #{@udid} shell cat #{dump}`
+    unless @page_source
+      dump = `adb -s #{@udid} shell uiautomator dump | egrep -o '/.*?xml'`
+      @page_source = `adb -s #{@udid} shell cat #{dump}`
+    end
+    @page_source
   end
 
-  def screenshot
+  def save_screenshot
     file_name = "#{@platform}_#{TIMESTAMP}.png"
     `adb -s #{@udid} shell screencap -p /sdcard/#{file_name}`
     `adb -s #{@udid} pull /sdcard/#{file_name} #{ATTACHMENTS_FOLDER}/`
     `adb -s #{@udid} shell rm /sdcard/#{file_name}`
   end
-
 end

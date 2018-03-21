@@ -21,8 +21,9 @@ class IOS < Base
   end
 
   def skeletoner
-    create_page_objects(page_source)
-    screenshot
+    create_page_objects
+    save_screenshot
+    save(page_source)
   end
 
   private
@@ -49,7 +50,7 @@ class IOS < Base
     code_generation(method_name, NSPREDICATE, locator)
   end
 
-  def create_page_objects(page_source)
+  def create_page_objects
     page_source.each_line do |line|
       break if line.include?(' StatusBar, ')
       next  if line.include?('Application, ')
@@ -75,30 +76,36 @@ class IOS < Base
   def code_generation(method_name, locator_type, value)
     java = java(method_name, locator_type, value)
     ruby = ruby(method_name, locator_type, value)
-    add_new_page_object(java, Language::JAVA)
-    add_new_page_object(ruby, Language::RUBY)
+    save(java, lang: Language::JAVA)
+    save(ruby, lang: Language::RUBY)
 
     # ADD OTHER LANGUAGES HERE
   end
 
-  def add_new_page_object(code, lan)
-    file_path = "#{PAGE_OBJECTS_FOLDER}/#{@platform}_#{TIMESTAMP}.#{lan}"
+  def page_source
+    unless @page_source
+      FileUtils.rm_rf(XCRESULTS_FOLDER)
+      start_grep, end_grep = 'start_grep_tag', 'end_grep_tag'
+      ios_arch = @ios_sim ? 'iOS Simulator' : 'iOS'
+      @page_source = `xcodebuild test \
+                        -project Skeleton.xcodeproj \
+                        -scheme Skeleton \
+                        -destination 'platform=#{ios_arch},id=#{@udid}' \
+                        -resultBundlePath #{XCRESULTS_FOLDER} \
+                        bundle_id="#{@bundle_id}" | \
+                        awk '/#{start_grep}/,/#{end_grep}/'`
+      @page_source.slice!(start_grep)
+      @page_source.slice!(end_grep)
+    end
+    @page_source
+  end
+
+  def save(code, lang: 'xml')
+    file_path = "#{PAGE_OBJECTS_FOLDER}/#{@platform}_#{TIMESTAMP}.#{lang}"
     File.open(file_path, 'a') { |f| f.write(code) }
   end
 
-  def page_source
-    FileUtils.rm_rf(XCRESULTS_FOLDER)
-    ios_arch = @ios_sim ? 'iOS Simulator' : 'iOS'
-    `xcodebuild test \
-      -project Skeleton.xcodeproj \
-      -scheme Skeleton \
-      -destination 'platform=#{ios_arch},id=#{@udid}' \
-      -resultBundlePath #{XCRESULTS_FOLDER} \
-      bundle_id="#{@bundle_id}" | \
-      awk '/start_grep_tag/,/end_grep_tag/'`
-  end
-
-  def screenshot
+  def save_screenshot
     xc_attachments_folder = 'Attachments'
     png_path = "#{XCRESULTS_FOLDER}/#{xc_attachments_folder}/*.png"
     new_path = "#{Dir.pwd}/#{ATTACHMENTS_FOLDER}/#{@platform}_#{TIMESTAMP}.png"
