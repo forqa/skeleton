@@ -105,15 +105,15 @@ class IOS < Base
   end
 
   def page_source
-    results_dir = 'attach'
+    results_dir = 'XCResults'
     FileUtils.rm_rf(results_dir)
     ios_arch = @ios_sim ? 'iOS Simulator' : 'iOS'
-    %x(xcodebuild test \
+    `xcodebuild test \
       -project Skeleton.xcodeproj \
       -scheme Skeleton \
       -destination 'platform=#{ios_arch},id=#{@udid}' \
       -resultBundlePath #{results_dir} \
       bundle_id="#{@bundle_id}" | \
-      awk '/start_grep_tag/,/end_grep_tag/')
+      awk '/start_grep_tag/,/end_grep_tag/'`
   end
 end
