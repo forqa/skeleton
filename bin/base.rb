@@ -3,14 +3,19 @@ require_relative 'languages.rb'
 class Base
   include Language
 
-  PAGE_OBJECTS_FOLDER = "PageObjects"
-  ATTACHMENTS_FOLDER = "Attachments"
+  PAGE_OBJECTS_FOLDER = 'PageObjects'
+  ATTACHMENTS_FOLDER = 'Attachments'
   TIMESTAMP = (Time.now.to_f * 1000).to_i
 
   def precondition
     FileUtils.mkdir_p(PAGE_OBJECTS_FOLDER)
     FileUtils.mkdir_p(ATTACHMENTS_FOLDER)
   end
+
+  def skeletoner
+  end
+
+  protected
 
   def snake_style(method_name)
     method_name.each_char.with_index do |char, char_i|
@@ -62,9 +67,6 @@ class Base
       end
 
     RUBY
-  end
-
-  def skeletoner
   end
 
   def screenshot

@@ -7,10 +7,10 @@ class Android < Base
                     java: 'content-desc',
                     ruby: 'content-desc'
                  }
-  TEXT = "text"
-  ID = "id"
-  XPATH = "xpath"
-  CLASS = "class"
+  TEXT = 'text'
+  ID = 'id'
+  XPATH = 'xpath'
+  CLASS = 'class'
 
 
 
@@ -71,9 +71,8 @@ class Android < Base
   end
 
   def add_new_page_object(code, lan)
-    File.open("#{PAGE_OBJECTS_FOLDER}/#{@platform}_#{TIMESTAMP}.#{lan}", 'a') do |f|
-      f.write(code)
-    end
+    file_path = "#{PAGE_OBJECTS_FOLDER}/#{@platform}_#{TIMESTAMP}.#{lan}"
+    File.open(file_path, 'a') { |f| f.write(code) }
   end
 
   def page_source
