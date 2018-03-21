@@ -1,22 +1,28 @@
 class Android < Base
-  RESOURCE_ID = { java: 'resource-id',
-                  ruby: 'resource-id'}
-  CONTENT_DESC = { java: 'content-desc',
-                   ruby: 'content-desc'}
+  RESOURCE_ID = { 
+                  java: 'resource-id',
+                  ruby: 'resource-id'
+                }
+  CONTENT_DESC = { 
+                    java: 'content-desc',
+                    ruby: 'content-desc'
+                 }
   TEXT = "text"
   ID = "id"
   XPATH = "xpath"
   CLASS = "class"
 
-  attr_accessor :platform, :udid, :bundle_id, :ios_sim, :dir
+
+
+  attr_accessor :platform, :udid, :bundle_id, :ios_sim
 
   def initialize(options)
     self.platform = options[:platform]
     self.udid = options[:udid]
-    self.dir = options[:dir]
   end
 
   def skeletoner
+    screenshot
     create_page_objects(get_page_source)
   end
 
@@ -73,8 +79,17 @@ class Android < Base
     JAVA
   end
 
+    def ruby(method_name, locator_type, value)
+    <<~RUBY
+      def #{snake_style(method_name)}
+        return :#{locator_type[:ruby]}, "#{value}"
+      end
+
+    RUBY
+  end
+
   def add_new_page_object(code, lan)
-    File.open("#{@dir}/#{@platform}_#{TIMESTAMP}.#{lan}", 'a') do |f|
+    File.open("#{PAGE_OBJECTS_FOLDER}/#{@platform}_#{TIMESTAMP}.#{lan}", 'a') do |f|
       f.write(code)
     end
   end
@@ -82,6 +97,13 @@ class Android < Base
   def get_page_source
     dump = `adb -s #{@udid} shell uiautomator dump | egrep -o '/.*?xml'`
     `adb -s #{@udid} shell cat #{dump}`
+  end
+
+  def screenshot
+    file_name = "#{@platform}_#{TIMESTAMP}.png"
+    `adb -s #{@udid} shell screencap -p /sdcard/#{file_name}`
+    `adb -s #{@udid} pull /sdcard/#{file_name} #{ATTACHMENTS_FOLDER}/`
+    `adb -s #{@udid} shell rm /sdcard/#{file_name}`
   end
 
 end

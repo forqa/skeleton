@@ -3,7 +3,14 @@ require_relative 'languages.rb'
 class Base
   include Language
 
+  PAGE_OBJECTS_FOLDER = "PageObjects"
+  ATTACHMENTS_FOLDER = "Attachments"
   TIMESTAMP = (Time.now.to_f * 1000).to_i
+
+  def precondition
+    FileUtils.mkdir_p(PAGE_OBJECTS_FOLDER)
+    FileUtils.mkdir_p(ATTACHMENTS_FOLDER)
+  end
 
   def snake_style(method_name)
     method_name.each_char.with_index do |char, char_i|
@@ -39,6 +46,4 @@ class Base
     @locator_index = @locator_index.nil? ? 1 : @locator_index + 1
   end
 
-  def get_page_source
-  end
 end

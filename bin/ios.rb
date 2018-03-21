@@ -10,14 +10,13 @@ class IOS < Base
   IDENTIFIER = 'identifier'
   LABEL = 'label'
 
-  attr_accessor :platform, :udid, :bundle_id, :ios_sim, :dir
+  attr_accessor :platform, :udid, :bundle_id, :ios_sim
 
   def initialize(options)
     self.platform = options[:platform]
     self.udid = options[:udid]
     self.ios_sim = options[:ios_sim]
     self.bundle_id = options[:bundle_id]
-    self.dir = options[:dir]
   end
 
   def skeletoner
@@ -99,7 +98,7 @@ class IOS < Base
   end
 
   def add_new_page_object(code, lan)
-    File.open("#{@dir}/#{@platform}_#{TIMESTAMP}.#{lan}", 'a') do |f|
+    File.open("#{PAGE_OBJECTS_FOLDER}/#{@platform}_#{TIMESTAMP}.#{lan}", 'a') do |f|
       f.write(code)
     end
   end
