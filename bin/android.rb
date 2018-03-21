@@ -1,6 +1,8 @@
 class Android < Base
-  RESOURCE_ID = "resource-id"
-  CONTENT_DESC = "content-desc"
+  RESOURCE_ID = { java: 'resource-id',
+                  ruby: 'resource-id'}
+  CONTENT_DESC = { java: 'content-desc',
+                   ruby: 'content-desc'}
   TEXT = "text"
   ID = "id"
   XPATH = "xpath"
