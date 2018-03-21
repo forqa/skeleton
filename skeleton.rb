@@ -53,7 +53,7 @@ class Skeleton
   end
 end
 
-options = {:dir => 'PageObject'}
+options = {}
 ARGV.options do |opts|
   opts.on('-u',
   				'--udid=val',
