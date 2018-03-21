@@ -64,13 +64,13 @@ class Android < Base
 
   def code_generation(method_name, locator_type, value)
     java = java(method_name, locator_type, value)
-    save(java, lang: Language::JAVA)
+    save(java, format: Language::JAVA)
 
     # ADD OTHER LANGUAGES HERE
   end
 
-  def save(code, lang: 'xml')
-    file_path = "#{PAGE_OBJECTS_FOLDER}/#{@platform}_#{TIMESTAMP}.#{lang}"
+  def save(code, format: 'xml')
+    file_path = "#{PAGE_OBJECTS_FOLDER}/#{@platform}_#{TIMESTAMP}.#{format}"
     File.open(file_path, 'a') { |f| f.write(code) }
   end
 
