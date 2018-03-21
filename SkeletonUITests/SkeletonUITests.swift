@@ -17,12 +17,12 @@ class SkeletonUITests: XCTestCase {
         sleep(1)
         print("start_grep_tag")
         print(app.debugDescription)
+        print("end_grep_tag")
         let screenshot = app.windows.firstMatch.screenshot()
         let attachment = XCTAttachment(screenshot: screenshot)
         attachment.lifetime = .keepAlways
         attachment.name = "skeleton"
         add(attachment)
-        print("end_grep_tag")
     }
     
 }
