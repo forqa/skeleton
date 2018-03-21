@@ -7,12 +7,11 @@ require_relative 'bin/android.rb'
 
 class Skeleton
 
-  attr_accessor :platform, :udid, :bundle_id, :ios_sim
+  attr_accessor :platform, :udid, :bundle_id
 
   def initialize(options)
     self.platform = options[:platform]
     self.udid = options[:udid]
-    self.ios_sim = options[:ios_sim]
     self.bundle_id = options[:bundle_id]
     @driver = ios? ? IOS.new(options) : Android.new(options)
   end
@@ -67,10 +66,6 @@ ARGV.options do |opts|
   				'--bundle=val',
   				'Set bundleId for your app [required for iOS]',
   				String) { |val| options[:bundle_id] = val }
-  opts.on('--ios_sim',
-          'Set this arg, if you use iOS Simulator [optional arg]') do
-    |val| options[:ios_sim] = val
-  end
   opts.parse!
 end
 

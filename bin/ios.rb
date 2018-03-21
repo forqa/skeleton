@@ -11,12 +11,11 @@ class IOS < Base
   LABEL = 'label'
   XCRESULTS_FOLDER = 'XCResults'
 
-  attr_accessor :platform, :udid, :bundle_id, :ios_sim
+  attr_accessor :platform, :udid, :bundle_id
 
   def initialize(options)
     self.platform = options[:platform]
     self.udid = options[:udid]
-    self.ios_sim = options[:ios_sim]
     self.bundle_id = options[:bundle_id]
   end
 
@@ -86,7 +85,7 @@ class IOS < Base
     unless @page_source
       FileUtils.rm_rf(XCRESULTS_FOLDER)
       start_grep, end_grep = 'start_grep_tag', 'end_grep_tag'
-      ios_arch = @ios_sim ? 'iOS Simulator' : 'iOS'
+      ios_arch = simulator? ? 'iOS Simulator' : 'iOS'
       @page_source = `xcodebuild test \
                         -project Skeleton.xcodeproj \
                         -scheme Skeleton \
@@ -98,6 +97,11 @@ class IOS < Base
       @page_source.slice!(end_grep)
     end
     @page_source
+  end
+
+  def simulator?
+    simulators = `xcrun simctl list`
+    simulators.include?(@udid)
   end
 
   def save(code, format: 'xml')
