@@ -6,14 +6,14 @@ require_relative 'bin/ios.rb'
 require_relative 'bin/android.rb'
 
 class Skeleton
-  attr_accessor :platform, :udid, :bundle_id, :ios_sim, :dir
+
+  attr_accessor :platform, :udid, :bundle_id, :ios_sim
 
   def initialize(options)
     self.platform = options[:platform]
     self.udid = options[:udid]
     self.ios_sim = options[:ios_sim]
     self.bundle_id = options[:bundle_id]
-    self.dir = options[:dir]
     @driver = ios? ? IOS.new(options) : Android.new(options)
   end
 
@@ -40,7 +40,7 @@ class Skeleton
   end
 
   def start
-    precondition
+    @driver.precondition
     @driver.skeletoner
   end
 
@@ -50,10 +50,6 @@ class Skeleton
 
   def android?
     @platform == 'android'
-  end
-
-  def precondition
-    FileUtils.mkdir_p(@dir)
   end
 end
 
