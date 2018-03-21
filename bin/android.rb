@@ -1,9 +1,9 @@
 class Android < Base
-  RESOURCE_ID = { 
+  RESOURCE_ID = {
                   java: 'resource-id',
                   ruby: 'resource-id'
                 }
-  CONTENT_DESC = { 
+  CONTENT_DESC = {
                     java: 'content-desc',
                     ruby: 'content-desc'
                  }
@@ -23,7 +23,7 @@ class Android < Base
 
   def skeletoner
     screenshot
-    create_page_objects(get_page_source)
+    create_page_objects(page_source)
   end
 
   private
@@ -70,31 +70,13 @@ class Android < Base
     # ADD OTHER LANGUAGES HERE
   end
 
-  def java(method_name, locator_type, value)
-    <<~JAVA
-      By #{camel_style(method_name)}() {
-        return MobileBy.#{locator_type}("#{value}");
-      }
-
-    JAVA
-  end
-
-    def ruby(method_name, locator_type, value)
-    <<~RUBY
-      def #{snake_style(method_name)}
-        return :#{locator_type[:ruby]}, "#{value}"
-      end
-
-    RUBY
-  end
-
   def add_new_page_object(code, lan)
     File.open("#{PAGE_OBJECTS_FOLDER}/#{@platform}_#{TIMESTAMP}.#{lan}", 'a') do |f|
       f.write(code)
     end
   end
 
-  def get_page_source
+  def page_source
     dump = `adb -s #{@udid} shell uiautomator dump | egrep -o '/.*?xml'`
     `adb -s #{@udid} shell cat #{dump}`
   end

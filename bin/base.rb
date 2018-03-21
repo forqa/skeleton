@@ -46,4 +46,34 @@ class Base
     @locator_index = @locator_index.nil? ? 1 : @locator_index + 1
   end
 
+  def java(method_name, locator_type, value)
+    <<~JAVA
+      By #{camel_style(method_name)}() {
+        return MobileBy.#{locator_type[:java]}("#{value}");
+      }
+
+    JAVA
+  end
+
+  def ruby(method_name, locator_type, value)
+    <<~RUBY
+      def #{snake_style(method_name)}
+        return :#{locator_type[:ruby]}, "#{value}"
+      end
+
+    RUBY
+  end
+
+  def skeletoner
+  end
+
+  def screenshot
+  end
+
+  def page_source
+  end
+
+  def code_generation
+  end
+
 end

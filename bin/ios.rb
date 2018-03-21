@@ -9,6 +9,7 @@ class IOS < Base
                 }
   IDENTIFIER = 'identifier'
   LABEL = 'label'
+  XCRESULTS_FOLDER = 'XCResults'
 
   attr_accessor :platform, :udid, :bundle_id, :ios_sim
 
@@ -21,6 +22,7 @@ class IOS < Base
 
   def skeletoner
     create_page_objects(page_source)
+    screenshot
   end
 
   private
@@ -79,40 +81,31 @@ class IOS < Base
     # ADD OTHER LANGUAGES HERE
   end
 
-  def java(method_name, locator_type, value)
-    <<~JAVA
-      By #{camel_style(method_name)}() {
-        return MobileBy.#{locator_type[:java]}("#{value}");
-      }
-
-    JAVA
-  end
-
-  def ruby(method_name, locator_type, value)
-    <<~RUBY
-      def #{snake_style(method_name)}
-        return :#{locator_type[:ruby]}, "#{value}"
-      end
-
-    RUBY
-  end
-
   def add_new_page_object(code, lan)
-    File.open("#{PAGE_OBJECTS_FOLDER}/#{@platform}_#{TIMESTAMP}.#{lan}", 'a') do |f|
+    File.open("#{PAGE_OBJECTS_FOLDER}/" +
+              "#{@platform}_#{TIMESTAMP}.#{lan}", 'a') do |f|
       f.write(code)
     end
   end
 
   def page_source
-    results_dir = 'attach'
-    FileUtils.rm_rf(results_dir)
+    FileUtils.rm_rf(XCRESULTS_FOLDER)
     ios_arch = @ios_sim ? 'iOS Simulator' : 'iOS'
-    %x(xcodebuild test \
+    `xcodebuild test \
       -project Skeleton.xcodeproj \
       -scheme Skeleton \
       -destination 'platform=#{ios_arch},id=#{@udid}' \
-      -resultBundlePath #{results_dir} \
+      -resultBundlePath #{XCRESULTS_FOLDER} \
       bundle_id="#{@bundle_id}" | \
-      awk '/start_grep_tag/,/end_grep_tag/')
+      awk '/start_grep_tag/,/end_grep_tag/'`
+  end
+
+  def screenshot
+    xc_attachments_folder = 'Attachments'
+    png_path = "#{XCRESULTS_FOLDER}/#{xc_attachments_folder}/*.png"
+    new_path = "#{Dir.pwd}/#{ATTACHMENTS_FOLDER}/#{@platform}_#{TIMESTAMP}.png"
+    screenshots = Dir[png_path].collect { |png| File.expand_path(png) }
+    FileUtils.cp(screenshots[0], new_path)
+    FileUtils.rm_rf(XCRESULTS_FOLDER)
   end
 end
