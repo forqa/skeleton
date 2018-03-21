@@ -95,6 +95,10 @@ class IOS < Base
                         awk '/#{start_grep}/,/#{end_grep}/'`
       @page_source.slice!(start_grep)
       @page_source.slice!(end_grep)
+      if @page_source.empty?
+        raise "Something went wrong." +
+              "Try to sign Skeleton and trust him in the iOS setting."
+      end
     end
     @page_source
   end
