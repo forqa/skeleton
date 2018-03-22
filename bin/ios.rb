@@ -107,7 +107,7 @@ class IOS < Base
                    "Try to sign Skeleton and trust him in the iOS setting.")
         Process.exit(1)
       end
-      log.info("Successfully getting Screen Source Tree 🎩")
+      log.info("Successfully getting Screen Source Tree 🔥")
     end
     @page_source
   end
@@ -127,7 +127,7 @@ class IOS < Base
   end
 
   def save_screenshot
-    log.info("Saving screenshot 🎥")
+    log.info("Saving screenshot 📷")
     xc_attachments_folder = 'Attachments'
     png_path = "#{XCRESULTS_FOLDER}/#{xc_attachments_folder}/*.png"
     new_path = "#{Dir.pwd}/#{ATTACHMENTS_FOLDER}/#{@platform}_#{TIMESTAMP}.png"
