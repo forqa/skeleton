@@ -14,7 +14,7 @@ class Base
   end
 
   def log
-    unless @log.nil?
+    if @log.nil?
       create_logger
     end
     @log

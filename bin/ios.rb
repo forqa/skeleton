@@ -88,7 +88,7 @@ class IOS < Base
   end
 
   def page_source
-    unless @page_source
+    if @page_source.nil?
       log.info("Getting screen source tree ⚒")
       FileUtils.rm_rf(XCRESULTS_FOLDER)
       start_grep, end_grep = 'start_grep_tag', 'end_grep_tag'
@@ -113,7 +113,7 @@ class IOS < Base
   end
 
   def simulator?
-    unless @simulator
+    if @simulator.nil?
       log.info("Checking iOS UDID 👨‍💻")
       simulators = `xcrun simctl list`
       @simulator = simulators.include?(@udid)
