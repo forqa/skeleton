@@ -54,7 +54,7 @@ class IOS < Base
   end
 
   def create_page_objects
-    log.info("Generation page objects for your awesome language 💪")
+    log.info('Generation page objects for your awesome language 💪')
     page_source.each_line do |line|
       break if line.include?(' StatusBar, ')
       next  if line.include?('Application, ')
@@ -89,7 +89,7 @@ class IOS < Base
 
   def page_source
     if @page_source.nil?
-      log.info("Getting screen source tree ⚒")
+      log.info('Getting screen source tree ⚒')
       FileUtils.rm_rf(XCRESULTS_FOLDER)
       start_grep, end_grep = 'start_grep_tag', 'end_grep_tag'
       ios_arch = simulator? ? 'iOS Simulator' : 'iOS'
@@ -103,18 +103,18 @@ class IOS < Base
       @page_source.slice!(start_grep)
       @page_source.slice!(end_grep)
       if @page_source.empty?
-        log.fatal("Something went wrong. " +
-                   "Try to sign Skeleton and trust him in the iOS setting.")
+        log.fatal('Something went wrong. Try to sign Skeleton ' \
+                  'and trust it in the iOS setting.')
         Process.exit(1)
       end
-      log.info("Successfully getting Screen Source Tree 🔥")
+      log.info('Successfully getting Screen Source Tree 🔥')
     end
     @page_source
   end
 
   def simulator?
     if @simulator.nil?
-      log.info("Checking iOS UDID 👨‍💻")
+      log.info('Checking iOS UDID 👨‍💻')
       simulators = `xcrun simctl list`
       @simulator = simulators.include?(@udid)
     end
@@ -127,7 +127,7 @@ class IOS < Base
   end
 
   def save_screenshot
-    log.info("Saving screenshot 📷")
+    log.info('Saving screenshot 📷')
     xc_attachments_folder = 'Attachments'
     png_path = "#{XCRESULTS_FOLDER}/#{xc_attachments_folder}/*.png"
     new_path = "#{Dir.pwd}/#{ATTACHMENTS_FOLDER}/#{@platform}_#{TIMESTAMP}.png"
