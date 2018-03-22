@@ -42,6 +42,9 @@ class Skeleton
   def start
     @driver.precondition
     @driver.skeletoner
+    @driver.log.info("\nYou can find your page objects:" +
+                     "\nby this timestamp: #{Base::TIMESTAMP}" +
+                     "\nhere: #{Dir.pwd}/#{Base::PAGE_OBJECTS_FOLDER}")
   end
 
   def ios?

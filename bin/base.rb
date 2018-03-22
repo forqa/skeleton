@@ -13,6 +13,13 @@ class Base
     FileUtils.mkdir_p(ATTACHMENTS_FOLDER)
   end
 
+  def log
+    unless @log.nil?
+      create_logger
+    end
+    @log
+  end
+
   def skeletoner
   end
 
