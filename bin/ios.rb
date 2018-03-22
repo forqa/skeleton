@@ -20,9 +20,13 @@ class IOS < Base
   end
 
   def skeletoner
+    @log.info('We starting to skeleton your screen 🚀')
+    simulator?
+    page_source
     create_page_objects
     save_screenshot
     save(page_source)
+    @log.info('We successfully skeletoned your screen 👻')
   end
 
   private
@@ -50,6 +54,7 @@ class IOS < Base
   end
 
   def create_page_objects
+    @log.info("Generation page objects for your awesome language 💪")
     page_source.each_line do |line|
       break if line.include?(' StatusBar, ')
       next  if line.include?('Application, ')
@@ -75,6 +80,7 @@ class IOS < Base
   def code_generation(method_name, locator_type, value)
     java = java(method_name, locator_type, value)
     ruby = ruby(method_name, locator_type, value)
+
     save(java, format: Language::JAVA)
     save(ruby, format: Language::RUBY)
 
@@ -83,6 +89,7 @@ class IOS < Base
 
   def page_source
     unless @page_source
+      @log.info("Getting screen source tree ⚒")
       FileUtils.rm_rf(XCRESULTS_FOLDER)
       start_grep, end_grep = 'start_grep_tag', 'end_grep_tag'
       ios_arch = simulator? ? 'iOS Simulator' : 'iOS'
@@ -96,16 +103,22 @@ class IOS < Base
       @page_source.slice!(start_grep)
       @page_source.slice!(end_grep)
       if @page_source.empty?
-        raise "Something went wrong." +
-              "Try to sign Skeleton and trust him in the iOS setting."
+        @log.fatal("Something went wrong. " +
+                   "Try to sign Skeleton and trust him in the iOS setting.")
+        Process.exit(1)
       end
+      @log.info("Successfully getting Screen Source Tree 🎩")
     end
     @page_source
   end
 
   def simulator?
-    simulators = `xcrun simctl list`
-    simulators.include?(@udid)
+    unless @simulator
+      @log.info("Checking iOS UDID 👨‍💻")
+      simulators = `xcrun simctl list`
+      @simulator = simulators.include?(@udid)
+    end
+    @simulator
   end
 
   def save(code, format: 'xml')
@@ -114,6 +127,7 @@ class IOS < Base
   end
 
   def save_screenshot
+    @log.info("Saving screenshot 🎥")
     xc_attachments_folder = 'Attachments'
     png_path = "#{XCRESULTS_FOLDER}/#{xc_attachments_folder}/*.png"
     new_path = "#{Dir.pwd}/#{ATTACHMENTS_FOLDER}/#{@platform}_#{TIMESTAMP}.png"

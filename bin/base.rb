@@ -8,6 +8,7 @@ class Base
   TIMESTAMP = (Time.now.to_f * 1000).to_i
 
   def precondition
+    create_logger
     FileUtils.mkdir_p(PAGE_OBJECTS_FOLDER)
     FileUtils.mkdir_p(ATTACHMENTS_FOLDER)
   end
@@ -16,6 +17,14 @@ class Base
   end
 
   protected
+
+  def create_logger
+    @log = Logger.new(STDOUT)
+    @log.level = Logger::INFO
+    @log.formatter = proc do |severity, datetime, progname, msg|
+      "[#{severity}] #{datetime}: #{msg}\n"
+    end
+  end
 
   def snake_style(method_name)
     method_name.each_char.with_index do |char, char_i|
