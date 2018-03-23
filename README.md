@@ -13,13 +13,13 @@ Prerequisites:
 #### iOS
 - Install [Xcode](https://developer.apple.com/xcode/download/).
 - Install [Xcode Command Line Tools](http://railsapps.github.io/xcode-command-line-tools.html).
-- For real devices you need to sign skeleton in xcodeproj ([like appium](https://github.com/appium/appium-xcuitest-driver/blob/master/docs/real-device-config.md))
+- For real devices you need to sign skeleton in xcodeproj ([like appium](https://github.com/appium/appium-xcuitest-driver/blob/master/docs/real-device-config.md)).
 
 Installation:
 ------
     $ git clone https://github.com/forqa/skeleton.git
-    gem install bundler
-    cd skeleton && bundle install
+    $ gem install bundler
+    $ cd skeleton && bundle install
 
 Usage:
 ------
