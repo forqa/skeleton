@@ -27,6 +27,7 @@ Usage:
 
 ## TODO
 * HTML Viewer
+* CLI
 
 ## License
 
