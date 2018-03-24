@@ -21,7 +21,7 @@ class IOS < Base
 
   def skeletoner
     log.info('We starting to skeleton your screen 🚀')
-    simulator?
+    check_udid
     page_source
     create_page_objects
     save_screenshot
@@ -83,8 +83,6 @@ class IOS < Base
 
     save(java, format: Language::JAVA)
     save(ruby, format: Language::RUBY)
-
-    # ADD OTHER LANGUAGES HERE
   end
 
   def page_source
@@ -92,7 +90,7 @@ class IOS < Base
       log.info('Getting screen source tree ⚒')
       FileUtils.rm_rf(XCRESULTS_FOLDER)
       start_grep, end_grep = 'start_grep_tag', 'end_grep_tag'
-      ios_arch = simulator? ? 'iOS Simulator' : 'iOS'
+      ios_arch = @simulator ? 'iOS Simulator' : 'iOS'
       @page_source = `xcodebuild test \
                         -project Skeleton.xcodeproj \
                         -scheme Skeleton \
@@ -104,7 +102,7 @@ class IOS < Base
       @page_source.slice!(end_grep)
       if @page_source.empty?
         log.fatal('Something went wrong. Try to sign Skeleton ' \
-                  'and trust it in the iOS setting.')
+                  'and to trust it in the iOS settings.')
         Process.exit(1)
       end
       log.info('Successfully getting Screen Source Tree 🔥')
@@ -112,13 +110,16 @@ class IOS < Base
     @page_source
   end
 
-  def simulator?
+  def check_udid
     if @simulator.nil?
       log.info('Checking iOS UDID 👨‍💻')
       simulators = `xcrun simctl list`
       @simulator = simulators.include?(@udid)
+      if !@simulator && !`instruments -s devices`.include?("[#{@udid}]")
+        log.fatal("No such devices with UDID: #{@udid}")
+        Process.exit(1)
+      end
     end
-    @simulator
   end
 
   def save(code, format: 'xml')
