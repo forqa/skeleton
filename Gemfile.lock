@@ -1,0 +1,28 @@
+PATH
+  remote: .
+  specs:
+    skeleton (0.0.1)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    colorize (0.8.1)
+    fileutils (1.0.2)
+    mini_portile2 (2.3.0)
+    nokogiri (1.8.2)
+      mini_portile2 (~> 2.3.0)
+    rake (12.3.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  bundler (~> 1.16)
+  colorize (~> 0.8.1)
+  fileutils
+  nokogiri (~> 1.8.2)
+  rake (~> 12.3.0)
+  skeleton!
+
+BUNDLED WITH
+   1.16.1

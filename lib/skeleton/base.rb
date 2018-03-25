@@ -3,8 +3,9 @@ require_relative 'languages.rb'
 class Base
   include Language
 
-  PAGE_OBJECTS_FOLDER = 'PageObjects'
-  ATTACHMENTS_FOLDER = 'Attachments'
+  ROOT_DIR = File.expand_path('..', Dir.pwd)
+  PAGE_OBJECTS_FOLDER = "#{ROOT_DIR}/PageObjects"
+  ATTACHMENTS_FOLDER = "#{ROOT_DIR}/Attachments"
   TIMESTAMP = (Time.now.to_f * 1000).to_i
 
   def precondition

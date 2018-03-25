@@ -9,7 +9,7 @@ class IOS < Base
                 }
   IDENTIFIER = 'identifier'
   LABEL = 'label'
-  XCRESULTS_FOLDER = 'XCResults'
+  XCRESULTS_FOLDER = "#{File.expand_path('..', Dir.pwd)}/XCResults"
 
   attr_accessor :platform, :udid, :bundle_id
 
@@ -92,7 +92,7 @@ class IOS < Base
       start_grep, end_grep = 'start_grep_tag', 'end_grep_tag'
       ios_arch = @simulator ? 'iOS Simulator' : 'iOS'
       @page_source = `xcodebuild test \
-                        -project Skeleton.xcodeproj \
+                        -project #{ROOT_DIR}/Skeleton.xcodeproj \
                         -scheme Skeleton \
                         -destination 'platform=#{ios_arch},id=#{@udid}' \
                         -resultBundlePath #{XCRESULTS_FOLDER} \
@@ -129,9 +129,8 @@ class IOS < Base
 
   def save_screenshot
     log.info('Saving screenshot 📷')
-    xc_attachments_folder = 'Attachments'
-    png_path = "#{XCRESULTS_FOLDER}/#{xc_attachments_folder}/*.png"
-    new_path = "#{Dir.pwd}/#{ATTACHMENTS_FOLDER}/#{@platform}_#{TIMESTAMP}.png"
+    png_path = "#{XCRESULTS_FOLDER}/Attachments/*.png"
+    new_path = "#{ATTACHMENTS_FOLDER}/#{@platform}_#{TIMESTAMP}.png"
     screenshots = Dir[png_path].collect { |png| File.expand_path(png) }
     FileUtils.cp(screenshots[0], new_path)
     FileUtils.rm_rf(XCRESULTS_FOLDER)
