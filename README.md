@@ -17,13 +17,11 @@ Prerequisites:
 
 Installation:
 ------
-    $ git clone https://github.com/forqa/skeleton.git
-    $ gem install bundler
-    $ cd skeleton && bundle install
+    $ gem install skeleton-ui
 
 Usage:
 ------
-    $ ruby skeleton.rb -h
+    $ skeleton -h
 
 ## License
 
