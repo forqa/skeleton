@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require "skeleton/version"
 
 Gem::Specification.new do |spec|
-  spec.name          = "skeleton"
+  spec.name          = "skeleton-ui"
   spec.version       = Skeleton::VERSION
   spec.authors       = ["a.alterpesotskiy"]
   spec.email         = ["33gri@bk.ru"]
