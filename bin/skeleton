@@ -1,0 +1,26 @@
+#!/usr/bin/env ruby
+
+require 'optparse'
+require_relative '../lib/skeleton'
+
+module Skeleton
+	options = {}
+	ARGV.options do |opts|
+	  opts.on('-u',
+	  				'--udid=val',
+	  				'Set device udid',
+	  				String) { |val| options[:udid] = val }
+	  opts.on('-p',
+	  				'--platform=val',
+	  				'Set device platform',
+	  				String) { |val| options[:platform] = val }
+	  opts.on('-b',
+	  				'--bundle=val',
+	  				'Set bundleId for your app [required for iOS]',
+	  				String) { |val| options[:bundle_id] = val }
+	  opts.parse!
+	end
+
+	skeleton = Skeleton.new(options)
+	skeleton.start
+end

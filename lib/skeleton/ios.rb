@@ -9,7 +9,7 @@ class IOS < Base
                 }
   IDENTIFIER = 'identifier'
   LABEL = 'label'
-  XCRESULTS_FOLDER = "#{File.expand_path('..', Dir.pwd)}/XCResults"
+  XCRESULTS_FOLDER = "#{ROOT_DIR}/XCResults"
 
   attr_accessor :platform, :udid, :bundle_id
 

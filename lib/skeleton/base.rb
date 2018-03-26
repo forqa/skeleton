@@ -3,7 +3,8 @@ require_relative 'languages.rb'
 class Base
   include Language
 
-  ROOT_DIR = File.expand_path('..', Dir.pwd)
+  ROOT_DIR = "#{`gem environment gemdir`.strip}" \
+               "/gems/skeleton-ui-#{Skeleton::VERSION}"
   PAGE_OBJECTS_FOLDER = "#{ROOT_DIR}/PageObjects"
   ATTACHMENTS_FOLDER = "#{ROOT_DIR}/Attachments"
   TIMESTAMP = (Time.now.to_f * 1000).to_i

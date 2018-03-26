@@ -1,4 +1,3 @@
-require 'optparse'
 require 'fileutils'
 require 'nokogiri'
 require 'logger'
@@ -45,7 +44,7 @@ module Skeleton
 	  def start
 	    @driver.precondition
 	    @driver.skeletoner
-	    @driver.log.info("#{Dir.pwd}/#{Base::PAGE_OBJECTS_FOLDER}/. 😍")
+	    @driver.log.info("#{Base::PAGE_OBJECTS_FOLDER}/. 😍")
 	  end
 
 	  def ios?
@@ -56,24 +55,4 @@ module Skeleton
 	    @platform == 'android'
 	  end
 	end
-
-	options = {}
-	ARGV.options do |opts|
-	  opts.on('-u',
-	  				'--udid=val',
-	  				'Set device udid',
-	  				String) { |val| options[:udid] = val }
-	  opts.on('-p',
-	  				'--platform=val',
-	  				'Set device platform',
-	  				String) { |val| options[:platform] = val }
-	  opts.on('-b',
-	  				'--bundle=val',
-	  				'Set bundleId for your app [required for iOS]',
-	  				String) { |val| options[:bundle_id] = val }
-	  opts.parse!
-	end
-
-	skeleton = Skeleton.new(options)
-	skeleton.start
 end
