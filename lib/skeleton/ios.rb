@@ -10,6 +10,7 @@ class IOS < Base
   IDENTIFIER = 'identifier'
   LABEL = 'label'
   XCRESULTS_FOLDER = "#{ROOT_DIR}/XCResults"
+  XCODEPROJ_FOLDER = "#{ROOT_DIR}/xcodeproj"
 
   attr_accessor :platform, :udid, :bundle_id
 
@@ -47,9 +48,9 @@ class IOS < Base
     code_generation(method_name, ACC_ID, locator)
   end
 
-  def create_locator_by_label(locator, type)
+  def create_locator_by_label(text, type)
     method_name = "#{type}#{increment_locator_id}"
-    locator = "#{LABEL} like '#{locator}'"
+    locator = "#{LABEL} like '#{text}'"
     code_generation(method_name, NSPREDICATE, locator)
   end
 
@@ -92,7 +93,7 @@ class IOS < Base
       start_grep, end_grep = 'start_grep_tag', 'end_grep_tag'
       ios_arch = @simulator ? 'iOS Simulator' : 'iOS'
       @page_source = `xcodebuild test \
-                        -project #{ROOT_DIR}/Skeleton.xcodeproj \
+                        -project #{XCODEPROJ_FOLDER}/Skeleton.xcodeproj \
                         -scheme Skeleton \
                         -destination 'platform=#{ios_arch},id=#{@udid}' \
                         -resultBundlePath #{XCRESULTS_FOLDER} \
