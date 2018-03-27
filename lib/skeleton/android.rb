@@ -1,15 +1,9 @@
 class Android < Base
-  RESOURCE_ID = {
-                  java: 'resource-id',
-                  ruby: 'resource-id'
-                }
-  CONTENT_DESC = {
-                    java: 'content-desc',
-                    ruby: 'content-desc'
-                 }
+  RESOURCE_ID = 'resource-id'
+  CONTENT_DESC = 'content-desc'
   TEXT = 'text'
-  ID = 'id'
-  XPATH = 'xpath'
+  ID = { java: :id }
+  XPATH = { java: :xpath }
   CLASS = 'class'
 
   attr_accessor :platform, :udid, :bundle_id, :ios_sim
@@ -20,9 +14,11 @@ class Android < Base
   end
 
   def skeletoner
+    log.info('We starting to skeleton your screen 🚀')
     create_page_objects
     save_screenshot
     save(page_source)
+    log.info('We successfully skeletoned your screen 👻')
   end
 
   private
@@ -58,6 +54,7 @@ class Android < Base
   end
 
   def create_page_objects
+    log.info('Generation page objects for your awesome language 💪')
     page_source_html = Nokogiri::HTML.parse(page_source)
     page_source_html.css('node').each { |line| create_locator(line) }
   end
@@ -65,8 +62,6 @@ class Android < Base
   def code_generation(method_name, locator_type, value)
     java = java(method_name, locator_type, value)
     save(java, format: Language::JAVA)
-
-    # ADD OTHER LANGUAGES HERE
   end
 
   def save(code, format: 'xml')
@@ -76,13 +71,20 @@ class Android < Base
 
   def page_source
     unless @page_source
+      log.info('Getting screen source tree ⚒')
       dump = `adb -s #{@udid} shell uiautomator dump | egrep -o '/.*?xml'`
       @page_source = `adb -s #{@udid} shell cat #{dump}`
+      if @page_source.empty?
+        log.fatal('Something went wrong.') # FIXME
+        Process.exit(1)
+      end
+      log.info('Successfully getting Screen Source Tree 🔥')
     end
     @page_source
   end
 
   def save_screenshot
+    log.info('Saving screenshot 📷')
     file_name = "#{@platform}_#{TIMESTAMP}.png"
     `adb -s #{@udid} shell screencap -p /sdcard/#{file_name}`
     `adb -s #{@udid} pull /sdcard/#{file_name} #{ATTACHMENTS_FOLDER}/`
