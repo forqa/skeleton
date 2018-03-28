@@ -11,7 +11,6 @@ import XCTest
 let app = XCUIApplication(bundleIdentifier: ProcessInfo.processInfo.environment["bundle_id"]!)
 
 class SkeletonUITests: XCTestCase {
-    
     func testMe() {
         app.activate()
         sleep(1)
@@ -24,5 +23,4 @@ class SkeletonUITests: XCTestCase {
         attachment.name = "skeleton"
         add(attachment)
     }
-    
 }
