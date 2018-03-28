@@ -2,6 +2,7 @@
 *.xcodeproj
 *.lock
 *.xcworkspace
+root.rb
 /PageObjects/
 /attach/
 /Attachments/
