@@ -1,4 +1,4 @@
 module Skeleton
-  VERSION = '0.0.8'
+  VERSION = '0.0.9'
   GEM_NAME = 'skeleton-ui'
 end
