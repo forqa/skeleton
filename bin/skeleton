@@ -1,26 +1,31 @@
 #!/usr/bin/env ruby
 
-require 'optparse'
+require 'commander/import'
 require_relative '../lib/skeleton'
 
 module Skeleton
-	options = {}
-	ARGV.options do |opts|
-	  opts.on('-u',
-	  				'--udid=val',
-	  				'Set device udid',
-	  				String) { |val| options[:udid] = val }
-	  opts.on('-p',
-	  				'--platform=val',
-	  				'Set device platform',
-	  				String) { |val| options[:platform] = val }
-	  opts.on('-b',
-	  				'--bundle=val',
-	  				'Set bundleId for your app [required for iOS]',
-	  				String) { |val| options[:bundle_id] = val }
-	  opts.parse!
+	program :version, VERSION
+	program :description, 'CLI for fast generating multi language page objects from iOS and Android screens.'
+
+	command :scan do |c|
+	  c.syntax = 'skeleton scan [options]'
+	  c.description = 'Make screen objects'
+	  c.example 'description', 'skeleton scan -p ios -u 749575366595763538563 -b com.my.bundle'
+	  c.option '-p', '--platform PLATFORM', String, 'Set device platform: android or ios'
+	  c.option '-u', '--udid UDID', String, 'Set device UDID'
+	  c.option '-b', '--bundle BUNDLE', String, 'Set Bundle ID for your app [required for iOS]'
+	  c.action do |args, options|
+	    Skeleton.new(options).run
+	  end
 	end
 
-	skeleton = Skeleton.new(options)
-	skeleton.start
+	command :clear do |c|
+	  c.syntax = 'skeleton clear'
+	  c.description = 'Clear user cache'
+	  c.example 'description', 'skeleton clear'
+	  c.action do |args, options|
+	    FileUtils.rm_rf(Base::PAGE_OBJECTS_FOLDER)
+	    FileUtils.rm_rf(Base::ATTACHMENTS_FOLDER)
+	  end
+	end
 end

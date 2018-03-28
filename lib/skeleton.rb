@@ -13,9 +13,9 @@ module Skeleton
 	  attr_accessor :platform, :udid, :bundle_id
 
 	  def initialize(options)
-	    self.platform = options[:platform]
-	    self.udid = options[:udid]
-	    self.bundle_id = options[:bundle_id]
+	    self.platform = options.platform
+	    self.udid = options.udid
+	    self.bundle_id = options.bundle
 	    @driver = ios? ? IOS.new(options) : Android.new(options)
 	  end
 
@@ -41,7 +41,7 @@ module Skeleton
 	    @bundle_id = bundle_id
 	  end
 
-	  def start
+	  def run
 	    @driver.precondition
 	    @driver.skeletoner
 	    @driver.log.info("#{Base::PAGE_OBJECTS_FOLDER}/. 😍")

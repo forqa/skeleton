@@ -15,9 +15,9 @@ class IOS < Base
   attr_accessor :platform, :udid, :bundle_id
 
   def initialize(options)
-    self.platform = options[:platform]
-    self.udid = options[:udid]
-    self.bundle_id = options[:bundle_id]
+    self.platform = options.platform
+    self.udid = options.udid
+    self.bundle_id = options.bundle
   end
 
   def skeletoner

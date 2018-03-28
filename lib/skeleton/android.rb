@@ -6,11 +6,11 @@ class Android < Base
   XPATH = { java: :xpath }
   CLASS = 'class'
 
-  attr_accessor :platform, :udid, :bundle_id, :ios_sim
+  attr_accessor :platform, :udid
 
   def initialize(options)
-    self.platform = options[:platform]
-    self.udid = options[:udid]
+    self.platform = options.platform
+    self.udid = options.udid
   end
 
   def skeletoner
