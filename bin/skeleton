@@ -26,6 +26,7 @@ module Skeleton
 	  c.action do |args, options|
 	    FileUtils.rm_rf(Base::PAGE_OBJECTS_FOLDER)
 	    FileUtils.rm_rf(Base::ATTACHMENTS_FOLDER)
+	    Base.new.log.info("Successfully clear user cache")
 	  end
 	end
 end
