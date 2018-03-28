@@ -21,7 +21,7 @@ Installation:
 
 Usage:
 ------
-    $ skeleton -h
+    $ skeleton scan -h
 
 ## License
 
