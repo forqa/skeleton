@@ -1,8 +1,6 @@
 .DS_Store
-*.xcodeproj
 *.lock
-*.xcworkspace
-root.rb
+*.xcuserdatad
 /PageObjects/
 /attach/
 /Attachments/

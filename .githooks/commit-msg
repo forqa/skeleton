@@ -1,0 +1,10 @@
+#!/bin/bash
+
+list=$(git diff --cached --name-only --diff-filter=ACRM)
+
+for file in $list; do
+  if [[ $file == *"root.rb"* || $file == *"project.pbxproj"* ]]; then
+    echo You cannot commit file $file. Please reset it and try again.
+    exit 1
+  fi
+done
