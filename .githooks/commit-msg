@@ -1,10 +1,15 @@
 #!/bin/bash
 
-list=$(git diff --cached --name-only --diff-filter=ACRM)
+commit_regex="(ISSUE-[0-9]+|merge)"
+if ! grep -iqE "$commit_regex" "$1"; then
+  echo "You need to add github issue tag in your commit, example: 'ISSUE-33: my pretty commit'"
+  exit 1
+fi
 
+list=$(git diff --cached --name-only --diff-filter=ACRM)
 for file in $list; do
   if [[ $file == *"root.rb"* || $file == *"project.pbxproj"* ]]; then
-    echo You cannot commit file $file. Please reset it and try again.
+    echo "You can't commit file $file. Please reset it and try again."
     exit 1
   fi
 done
