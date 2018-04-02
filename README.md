@@ -22,6 +22,11 @@ Installation:
 Usage:
 ------
     $ skeleton scan -h
+    
+Docs:
+------
+
+- [Setting up Skeleton for working with iOS real devices](https://github.com/forqa/skeleton/blob/master/docs/real-ios-device-config.md)
 
 ## License
 
