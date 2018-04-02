@@ -25,13 +25,11 @@ Usage:
 
     DESCRIPTION:
 
-    CLI for fast generating multi language page objects from iOS and
-    Android screens.
+    CLI for fast generating multi language page objects from iOS and Android screens.
 
     COMMANDS:
 
     clear Clear user cache
-    help  Display global or [command] help documentation
     scan  Make screen objects
 
     GLOBAL OPTIONS:
@@ -46,14 +44,10 @@ Usage:
     Display backtrace when an error occurs
 
         $ skeleton scan --help
-        
-            DESCRIPTION:
-            
-            Make screen objects
             
             EXAMPLES:
             
-            skeleton scan -p ios -u 749575366595763538563 -b com.my.bundle
+            skeleton scan -p (ios or android) -u 749575366595763538563 -b com.my.bundle
             
             OPTIONS:
             
@@ -67,10 +61,6 @@ Usage:
             Set Bundle ID for your app [required for iOS]
         
         $ skeleton clear --help
-        
-            DESCRIPTION:
-            
-            Clear user cache
             
             EXAMPLES:
             
