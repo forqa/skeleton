@@ -21,7 +21,60 @@ Installation:
 
 Usage:
 ------
-    $ skeleton scan -h
+    $ skeleton --help
+
+    DESCRIPTION:
+
+    CLI for fast generating multi language page objects from iOS and
+    Android screens.
+
+    COMMANDS:
+
+    clear Clear user cache
+    help  Display global or [command] help documentation
+    scan  Make screen objects
+
+    GLOBAL OPTIONS:
+
+    -h, --help
+    Display help documentation
+
+    -v, --version
+    Display version information
+
+    -t, --trace
+    Display backtrace when an error occurs
+
+        $ skeleton scan --help
+        
+            DESCRIPTION:
+            
+            Make screen objects
+            
+            EXAMPLES:
+            
+            skeleton scan -p ios -u 749575366595763538563 -b com.my.bundle
+            
+            OPTIONS:
+            
+            -p, --platform PLATFORM
+            Set device platform: android or ios
+            
+            -u, --udid UDID
+            Set device UDID
+            
+            -b, --bundle BUNDLE
+            Set Bundle ID for your app [required for iOS]
+        
+        $ skeleton clear --help
+        
+            DESCRIPTION:
+            
+            Clear user cache
+            
+            EXAMPLES:
+            
+            skeleton clear
     
 Docs:
 ------
