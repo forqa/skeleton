@@ -17,7 +17,7 @@ class Android < Base
     log.info('We starting to skeleton your screen 🚀')
     create_page_objects
     save_screenshot
-    save(page_source)
+    save(code: page_source)
     log.info('We successfully skeletoned your screen 👻')
   end
 
@@ -26,21 +26,27 @@ class Android < Base
   def create_locator_by_resouce_id(line)
     method_name = line[RESOURCE_ID]
     method_name.slice!(/.*id\//)
-    code_generation(method_name, ID, line[RESOURCE_ID])
+    code_generation(method_name: method_name,
+                    locator_type: ID,
+                    value: line[RESOURCE_ID])
   end
 
   def create_locator_by_content_desc(line)
     method_name = "#{line[CLASS]}#{increment_locator_id}"
     method_name.slice!(/.*\./)
     locator = "//#{line[CLASS]}[@#{CONTENT_DESC}='#{line[CONTENT_DESC]}']"
-    code_generation(method_name, XPATH, locator)
+    code_generation(method_name: method_name,
+                    locator_type: XPATH,
+                    value: locator)
   end
 
   def create_locator_by_text(line)
     method_name = "#{line[CLASS]}#{increment_locator_id}"
     method_name.slice!(/.*\./)
     locator = "//#{line[CLASS]}[@#{TEXT}='#{line[TEXT]}'"
-    code_generation(method_name, XPATH, locator)
+    code_generation(method_name: method_name,
+                    locator_type: XPATH,
+                    value: locator)
   end
 
   def create_locator(line)
@@ -59,14 +65,9 @@ class Android < Base
     page_source_html.css('node').each { |line| create_locator(line) }
   end
 
-  def code_generation(method_name, locator_type, value)
+  def code_generation(method_name:, locator_type:, value:)
     java = java(method_name, locator_type, value)
-    save(java, format: Language::JAVA)
-  end
-
-  def save(code, format: 'xml')
-    file_path = "#{PAGE_OBJECTS_FOLDER}/#{@platform}_#{TIMESTAMP}.#{format}"
-    File.open(file_path, 'a') { |f| f.write(code) }
+    save(code: java, format: Language::JAVA)
   end
 
   def page_source
@@ -75,7 +76,7 @@ class Android < Base
       dump = `adb -s #{@udid} shell uiautomator dump | egrep -o '/.*?xml'`
       @page_source = `adb -s #{@udid} shell cat #{dump}`
       if @page_source.empty?
-        log.fatal('Something went wrong.') # FIXME
+        log.fatal('Something went wrong. Check your device')
         Process.exit(1)
       end
       log.info('Successfully getting Screen Source Tree 🔥')

@@ -26,6 +26,11 @@ class Base
 
   protected
 
+  def save(code:, format: 'xml')
+    file_path = "#{PAGE_OBJECTS_FOLDER}/#{@platform}_#{TIMESTAMP}.#{format}"
+    File.open(file_path, 'a') { |f| f.write(code) }
+  end
+
   def create_logger
     @log = Logger.new(STDOUT)
     @log.level = Logger::INFO

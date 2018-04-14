@@ -26,7 +26,7 @@ class IOS < Base
     page_source
     create_page_objects
     save_screenshot
-    save(page_source)
+    save(code: page_source)
     log.info('We successfully skeletoned your screen 👻')
   end
 
@@ -45,13 +45,17 @@ class IOS < Base
 
   def create_locator_by_id(locator)
     method_name = locator.strip
-    code_generation(method_name, ACC_ID, locator)
+    code_generation(method_name: method_name,
+                    locator_type: ACC_ID,
+                    value: locator)
   end
 
   def create_locator_by_label(text, type)
     method_name = "#{type}#{increment_locator_id}"
     locator = "#{LABEL} like '#{text}'"
-    code_generation(method_name, NSPREDICATE, locator)
+    code_generation(method_name: method_name,
+                    locator_type: NSPREDICATE,
+                    value: locator)
   end
 
   def create_page_objects
@@ -78,12 +82,12 @@ class IOS < Base
     locator.nil? ? '' : locator[1]
   end
 
-  def code_generation(method_name, locator_type, value)
+  def code_generation(method_name:, locator_type:, value:)
     java = java(method_name, locator_type, value)
-    ruby = ruby(method_name, locator_type, value)
+    save(code: java, format: Language::JAVA)
 
-    save(java, format: Language::JAVA)
-    save(ruby, format: Language::RUBY)
+    ruby = ruby(method_name, locator_type, value)
+    save(code: ruby, format: Language::RUBY)
   end
 
   def page_source
@@ -116,16 +120,11 @@ class IOS < Base
       log.info('Checking iOS UDID 👨‍💻')
       simulators = `xcrun simctl list`
       @simulator = simulators.include?(@udid)
-      if !@simulator && !`instruments -s devices`.include?("[#{@udid}]")
+      unless @simulator && `instruments -s devices`.include?("[#{@udid}]")
         log.fatal("No such devices with UDID: #{@udid}")
         Process.exit(1)
       end
     end
-  end
-
-  def save(code, format: 'xml')
-    file_path = "#{PAGE_OBJECTS_FOLDER}/#{@platform}_#{TIMESTAMP}.#{format}"
-    File.open(file_path, 'a') { |f| f.write(code) }
   end
 
   def save_screenshot
