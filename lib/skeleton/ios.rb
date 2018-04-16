@@ -108,7 +108,7 @@ class IOS < Base
       if @page_source.empty?
         log.fatal('Something went wrong. Try to sign Skeleton ' \
                   'and to trust it in the iOS settings.')
-        Process.exit(1)
+        raise
       end
       log.info('Successfully getting Screen Source Tree 🔥')
     end
@@ -120,9 +120,9 @@ class IOS < Base
       log.info('Checking iOS UDID 👨‍💻')
       simulators = `xcrun simctl list`
       @simulator = simulators.include?(@udid)
-      unless @simulator && `instruments -s devices`.include?("[#{@udid}]")
+      if !@simulator && !`instruments -s devices`.include?(@udid)
         log.fatal("No such devices with UDID: #{@udid}")
-        Process.exit(1)
+        raise
       end
     end
   end

@@ -61,7 +61,7 @@ class Base
     space_i = 0
     method_name[0] = method_name[0].downcase
     method_name.each_char.with_index do |char, char_i|
-      if /[ -!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/.match(char)
+      if /[ -!@#$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/.match(char)
         method_name[char_i - space_i] = ''
         method_name[char_i - space_i] = method_name[char_i - space_i].capitalize
         space_i += 1
@@ -81,5 +81,4 @@ class Base
 
   def code_generation
   end
-
 end
