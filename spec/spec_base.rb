@@ -10,14 +10,17 @@ describe Base do
     expect(@base.send(:snake_style, 'TeSt')).to eq('te_st')
     expect(@base.send(:snake_style, 'tESt')).to eq('t_e_st')
     expect(@base.send(:snake_style, 'te  st')).to eq('te_st')
+    expect(@base.send(:camel_style, '[TEST]')).to eq('test')
     expect(@base.send(:snake_style, 't*!@(){}e:;#$^s[].,\'"t')).to eq('test')
   end
 
   it "should camel incoming string" do
+    expect(@base.send(:camel_style, 'TEST')).to eq('test')
     expect(@base.send(:camel_style, 'teSt')).to eq('teSt')
     expect(@base.send(:camel_style, 'te_st')).to eq('teSt')
     expect(@base.send(:camel_style, 'TeSt')).to eq('teSt')
     expect(@base.send(:camel_style, 'te  st')).to eq('teSt')
+    expect(@base.send(:camel_style, '[TEST]')).to eq('test')
     expect(@base.send(:camel_style, 't*!@(){}e:;#$^s[].,\'"t')).to eq('tEST')
   end
 

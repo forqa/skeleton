@@ -59,13 +59,21 @@ class Base
 
   def camel_style(method_name)
     space_i = 0
-    method_name[0] = method_name[0].downcase
     method_name.each_char.with_index do |char, char_i|
       if /[ -!@#$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/.match(char)
         method_name[char_i - space_i] = ''
-        method_name[char_i - space_i] = method_name[char_i - space_i].capitalize
-        space_i += 1
+        unless method_name[char_i - space_i].nil?
+          method_name[char_i - space_i] =
+            method_name[char_i - space_i].capitalize
+          space_i += 1
+        end
       end
+    end
+    if method_name == method_name.upcase
+      method_name.downcase
+    else
+      method_name[0] = method_name[0].downcase
+      method_name
     end
   end
 
