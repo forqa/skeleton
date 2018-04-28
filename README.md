@@ -13,7 +13,7 @@ Prerequisites:
 #### iOS
 - Install [Xcode](https://developer.apple.com/xcode/download/).
 - Install [Xcode Command Line Tools](http://railsapps.github.io/xcode-command-line-tools.html).
-- For real devices you need to sign skeleton in xcodeproj ([like appium](https://github.com/appium/appium-xcuitest-driver/blob/master/docs/real-device-config.md)).
+- [Setting up Skeleton for working with iOS real devices](https://github.com/forqa/skeleton/blob/master/docs/real-ios-device-config.md)
 
 Installation:
 ------
@@ -65,11 +65,6 @@ Usage:
             EXAMPLES:
             
             skeleton clear
-    
-Docs:
-------
-
-- [Setting up Skeleton for working with iOS real devices](https://github.com/forqa/skeleton/blob/master/docs/real-ios-device-config.md)
 
 ## License
 
