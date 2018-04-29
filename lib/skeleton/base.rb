@@ -40,40 +40,25 @@ class Base
   end
 
   def snake_style(method_name)
-    method_name.each_char.with_index do |char, char_i|
-      method_name[char_i] =
-        if /[ -!$%^&*()+|~=`{}\[\]:";'<>?,.\/]/.match(method_name[char_i])
-          '_'
-        elsif /[A-Z]/.match(method_name[char_i])
-          if method_name[char_i - 1] != '_'
-            "_#{method_name[char_i]}"
-          else
-            method_name[char_i]
-          end
-        else
-          method_name[char_i]
-        end
-    end
-    method_name.squeeze('_').downcase
+    method_name.tr("@()[]'\"*!?{}:;#$^.,\/\\", '').
+                tr('-', '_').
+                gsub(/([A-Z]+)([A-Z][a-z])/, '\1_\2').
+                gsub(/([a-z\d])([A-Z])/, '\1_\2').
+                gsub(/\s/, '_').
+                gsub(/__+/, '_').
+                downcase
   end
 
   def camel_style(method_name)
-    space_i = 0
-    method_name.each_char.with_index do |char, char_i|
-      if /[ -!@#$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/.match(char)
-        method_name[char_i - space_i] = ''
-        unless method_name[char_i - space_i].nil?
-          method_name[char_i - space_i] =
-            method_name[char_i - space_i].capitalize
-          space_i += 1
-        end
-      end
-    end
-    if method_name == method_name.upcase
-      method_name.downcase
+    method_name.tr!("@()[]'\"*!?{}:;#$^.,\/\\", '')
+    camel = method_name.split(/_|-|\ /).inject([]) do |buffer, e|
+      buffer.push(buffer.empty? ? e : e.capitalize)
+    end.join
+    if camel == camel.upcase
+      camel.downcase
     else
-      method_name[0] = method_name[0].downcase
-      method_name
+      camel[0] = camel[0].downcase
+      camel
     end
   end
 

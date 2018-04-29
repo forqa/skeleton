@@ -106,8 +106,8 @@ class IOS < Base
       @page_source.slice!(start_grep)
       @page_source.slice!(end_grep)
       if @page_source.empty?
-        log.fatal('Something went wrong. Try to sign Skeleton ' \
-                  'and to trust it in the iOS settings.')
+        log.fatal("Something went wrong. Try to sign Skeleton " \
+                  "in #{XCODEPROJ_FOLDER} and to trust it in the iOS settings.")
         raise
       end
       log.info('Successfully getting Screen Source Tree 🔥')

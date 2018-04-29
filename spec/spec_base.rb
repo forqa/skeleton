@@ -3,7 +3,7 @@ describe Base do
     @base = Base.new
   end
 
-  xit "should snake incoming string" do
+  it "should snake incoming string" do
     expect(@base.send(:snake_style, 'TEST')).to eq('test')
     expect(@base.send(:snake_style, 'te_st')).to eq('te_st')
     expect(@base.send(:snake_style, 'Te_St')).to eq('te_st')
@@ -11,7 +11,7 @@ describe Base do
     expect(@base.send(:snake_style, 'tESt')).to eq('t_e_st')
     expect(@base.send(:snake_style, 'te  st')).to eq('te_st')
     expect(@base.send(:camel_style, '[TEST]')).to eq('test')
-    expect(@base.send(:snake_style, 't*!@(){}e:;#$^s[].,\'"t')).to eq('test')
+    expect(@base.send(:snake_style, 't*!@(){}e:;#$^S[].,\'"t')).to eq('te_st')
   end
 
   it "should camel incoming string" do
@@ -21,7 +21,7 @@ describe Base do
     expect(@base.send(:camel_style, 'TeSt')).to eq('teSt')
     expect(@base.send(:camel_style, 'te  st')).to eq('teSt')
     expect(@base.send(:camel_style, '[TEST]')).to eq('test')
-    expect(@base.send(:camel_style, 't*!@(){}e:;#$^s[].,\'"t')).to eq('tEST')
+    expect(@base.send(:camel_style, 't*!@(){}e:;#$^S[].,\'"t')).to eq('teSt')
   end
 
   it "should create logger" do
