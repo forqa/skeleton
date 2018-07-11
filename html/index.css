@@ -1,0 +1,27 @@
+.container-fluid {
+	max-width: 1240px;
+}
+
+.aside {
+	position: relative;
+	height: 100%;
+}
+
+.aside__img {
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	top: 0;
+	-webkit-background-size: cover;
+	     -o-background-size: cover;
+	        background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+.content {
+	background-color: #FFF;
+	padding: 3rem;
+	border: 1px solid #eee;
+}

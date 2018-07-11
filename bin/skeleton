@@ -14,7 +14,7 @@ module Skeleton
 	  c.option '-p', '--platform PLATFORM', String, 'Set device platform: android or ios'
 	  c.option '-u', '--udid UDID', String, 'Set device UDID'
 	  c.option '-b', '--bundle BUNDLE', String, 'Set Bundle ID for your app [required for iOS]'
-	  c.action do |args, options|
+	  c.action do |_args, options|
 	    Skeleton.new(options).run
 	  end
 	end
@@ -23,10 +23,19 @@ module Skeleton
 	  c.syntax = 'skeleton clear'
 	  c.description = 'Clear user cache'
 	  c.example 'description', 'skeleton clear'
-	  c.action do |args, options|
-	    FileUtils.rm_rf(Base::PAGE_OBJECTS_FOLDER)
-	    FileUtils.rm_rf(Base::ATTACHMENTS_FOLDER)
-	    Base.new.log.info("Successfully clear user cache")
+	  c.action do |_args, _options|
+			base = Base.new
+	    base.clear
+	    base.log.info("Successfully clear user cache")
 	  end
+	end
+
+	command :server do |c|
+		c.syntax = 'skeleton server'
+		c.description = 'Run skeleton web-server'
+		c.example 'description', 'skeleton server'
+		c.action do |_args, _options|
+			system('cd ../html/ && ruby server.rb')
+		end
 	end
 end

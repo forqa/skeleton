@@ -1,3 +1,4 @@
+require 'erb'
 require 'fileutils'
 require 'nokogiri'
 require 'logger'
@@ -9,6 +10,7 @@ require_relative 'skeleton/android'
 
 module Skeleton
 	class Skeleton
+		include Language
 
 	  attr_accessor :platform, :udid, :bundle_id
 
@@ -42,10 +44,26 @@ module Skeleton
 	  end
 
 	  def run
-	    @driver.precondition
-	    @driver.skeletoner
-	    @driver.log.info("#{Base::PAGE_OBJECTS_FOLDER}/. 😍")
-	  end
+			@driver.clear
+			@driver.precondition
+			@driver.skeletoner
+			fill_html
+			@driver.log.info('Get it: http://localhost:4567/index.html 😍')
+		end
+
+		def fill_html
+			languages = ['ruby', 'java']
+			languages.each do |lang|
+				type = language_type(lang: lang)
+				@pageobject = File.read(Dir["#{Base::PAGE_OBJECTS_FOLDER}/*.#{type}"].first)
+				@elements_tree = File.read(Dir["#{Base::PAGE_OBJECTS_FOLDER}/*.xml"].first)
+				screenshot = Dir["#{Base::ATTACHMENTS_FOLDER}/*.png"].first
+				FileUtils.cp_r(screenshot, "../html/screenshot.png")
+				template = File.read('../html/template.html.erb')
+				result = ERB.new(template).result(binding)
+				File.open("../html/#{lang}.html", 'w+') { |f| f.write(result) }
+			end
+		end
 
 	  def ios?
 	    @platform == 'ios'

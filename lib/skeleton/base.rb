@@ -24,6 +24,11 @@ class Base
   def skeletoner
   end
 
+  def clear
+    FileUtils.rm_rf(Base::PAGE_OBJECTS_FOLDER)
+    FileUtils.rm_rf(Base::ATTACHMENTS_FOLDER)
+  end
+
   protected
 
   def save(code:, format: 'xml')

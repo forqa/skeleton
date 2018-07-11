@@ -20,4 +20,17 @@ module Language
 
     RUBY
   end
+
+  def language_type(lang:)
+    case lang
+    when 'ruby'
+      RUBY
+    when 'java'
+      JAVA
+    when 'python'
+      PYTHON
+    else
+      "I haven't this language"
+    end
+  end
 end

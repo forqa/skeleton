@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Skeleton</title>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/index.css"/>
+  </head>
+  <body class="bg-light">
+    <div class="container-fluid">
+      <div class="py-5 text-center">
+        <img class="d-block mx-auto mb-4" src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
+        <h2>Skeleton</h2>
+      </div>
+      <div class="row" style="min-height: 666px;">
+        <div class="col-md-4 mb-4">
+          <div class="aside" style="max-height: 666px;">
+            <div class="aside__img" style="background-image: url(screenshot.png);"></div>
+          </div>
+        </div>
+        <div class="col-md-8">
+          <h4 class="mb-3">PageObjects:</h4>
+          <div class="content" id="content">
+            <pre><code>def my_target_demo
+  return :accessibility_id, "myTarget Demo"
+end
+
+def other1
+  return :predicate, "label like 'myTarget Demo'"
+end
+
+def static_text2
+  return :predicate, "label like '320x50 and 300x250 banners'"
+end
+
+def static_text3
+  return :predicate, "label like 'Fullscreen banners'"
+end
+
+def static_text4
+  return :predicate, "label like 'Banners'"
+end
+
+def static_text5
+  return :predicate, "label like 'Interstitial Ads'"
+end
+
+def static_text6
+  return :predicate, "label like 'Advertisement inside app'"
+end
+
+def static_text7
+  return :predicate, "label like 'Instream video ads'"
+end
+
+def static_text8
+  return :predicate, "label like 'Native Ads'"
+end
+
+def static_text9
+  return :predicate, "label like 'Instream Ads'"
+end
+
+def static_text10
+  return :predicate, "label like 'Insert your slotId and ad type'"
+end
+
+def static_text11
+  return :predicate, "label like 'Ad unit'"
+end
+
+</code></pre>
+          </div>
+          <br>
+          <h4 class="mb-3">ElementsTree:</h4>
+          <div class="content" id="content">
+            <pre><code>
+    t =     1.48s Snapshot accessibility hierarchy for app with pid 38785
+    t =     1.49s Snapshot accessibility hierarchy for app with pid 38785
+Attributes: Application, 0x6000003801a0, pid: 38785, {{0.0, 0.0}, {414.0, 736.0}}, label: 'myTargetDemo'
+Element subtree:
+ →Application, 0x6000003801a0, pid: 38785, {{0.0, 0.0}, {414.0, 736.0}}, label: 'myTargetDemo'
+    Window, 0x60000019bfb0, Main Window, {{0.0, 0.0}, {414.0, 736.0}}
+      Other, 0x60000019fbd0, traits: 8589934592, {{0.0, 0.0}, {414.0, 736.0}}
+        NavigationBar, 0x60000019bee0, traits: 35192962023424, {{0.0, 20.0}, {414.0, 44.0}}, identifier: 'myTarget Demo'
+          Other, 0x6000003809c0, traits: 8590000128, {{144.3, 31.7}, {125.7, 20.3}}, label: 'myTarget Demo'
+        Other, 0x60000019ff10, traits: 8589934592, {{0.0, 0.0}, {414.0, 736.0}}
+          Other, 0x60000019fe40, traits: 8589934592, {{0.0, 0.0}, {414.0, 736.0}}
+            Other, 0x600000380a90, traits: 8589934592, {{0.0, 64.0}, {414.0, 672.0}}
+              Table, 0x600000380b60, traits: 35192962023424, {{0.0, 64.0}, {414.0, 672.0}}
+                Other, 0x600000380c30, traits: 8589934592, {{0.0, -104.0}, {414.0, 0.0}}
+                Cell, 0x600000380d00, traits: 8589934592, {{0.0, -104.0}, {414.0, 280.0}}
+                  StaticText, 0x600000380dd0, traits: 8589934656, {{16.0, 129.0}, {108.3, 32.3}}, label: '320x50 and 300x250 banners'
+                  StaticText, 0x604000391440, traits: 8589934656, {{218.0, 129.0}, {119.3, 16.3}}, label: 'Fullscreen banners'
+                  StaticText, 0x60400019c3c0, traits: 8589934656, {{16.0, 102.0}, {72.3, 21.0}}, label: 'Banners'
+                  StaticText, 0x60400019c2f0, traits: 8589934656, {{218.0, 102.0}, {124.7, 21.0}}, label: 'Interstitial Ads'
+                Cell, 0x60400019c220, traits: 8589934592, {{0.0, 176.0}, {414.0, 280.0}}
+                  StaticText, 0x60400038ee10, traits: 8589934656, {{16.0, 409.0}, {134.0, 32.3}}, label: 'Advertisement inside app's content'
+                  StaticText, 0x60400038eee0, traits: 8589934656, {{218.0, 409.0}, {118.3, 16.3}}, label: 'Instream video ads'
+                  StaticText, 0x60400019c490, traits: 8589934656, {{16.0, 382.0}, {92.7, 21.0}}, label: 'Native Ads'
+                  StaticText, 0x60400038ec70, traits: 8589934656, {{218.0, 382.0}, {113.7, 21.0}}, label: 'Instream Ads'
+                Cell, 0x60400038e860, traits: 8589934592, {{0.0, 456.0}, {414.0, 280.0}}
+                  StaticText, 0x60400038ed40, traits: 8589934656, {{16.0, 689.0}, {134.7, 32.3}}, label: 'Insert your slotId and ad type'
+                  StaticText, 0x604000390f60, traits: 8589934656, {{16.0, 662.0}, {62.0, 21.0}}, label: 'Ad unit'
+                Other, 0x604000390e90, traits: 8589934592, {{0.0, 736.0}, {414.0, 0.0}}
+    Window, 0x604000390dc0, {{0.0, 0.0}, {414.0, 736.0}}
+      Other, 0x604000390c20, traits: 8589934592, {{0.0, 0.0}, {414.0, 736.0}}
+        Other, 0x604000390cf0, traits: 8589934592, {{0.0, 736.0}, {414.0, 226.0}}
+    Window, 0x604000390b50, {{0.0, 0.0}, {414.0, 736.0}}
+      StatusBar, 0x6040003909b0, {{0.0, 0.0}, {414.0, 20.0}}
+        Other, 0x60400038f630, {{0.0, 0.0}, {414.0, 20.0}}
+        Other, 0x6040003923b0, {{0.0, 0.0}, {414.0, 20.0}}
+          Other, 0x6040003922e0, traits: 8388608, {{6.0, 0.0}, {39.0, 20.0}}
+          Other, 0x604000392b00, traits: 8388608, {{50.0, 0.0}, {14.0, 20.0}}, label: '3 of 3 Wi-Fi bars', value: SSID
+          Other, 0x604000392890, traits: 8389120, {{184.0, 0.0}, {50.0, 20.0}}, label: '5:58 PM'
+          Other, 0x604000391d30, traits: 8388608, {{374.0, 0.0}, {35.0, 20.0}}, label: '-100% battery power'
+Path to element:
+ →Application, 0x6000003801a0, pid: 38785, {{0.0, 0.0}, {414.0, 736.0}}, label: 'myTargetDemo'
+Query chain:
+ →Find: Application "ru.mail.adman" 0x6000000ba820
+  Output: {
+    Application, 0x6000003801a0, pid: 38785, {{0.0, 0.0}, {414.0, 736.0}}, label: 'myTargetDemo'
+  }
+
+
+</code></pre>
+          </div>
+        </div>
+      </div>
+      <footer class="my-5 pt-5 text-muted text-center text-small">
+        <p class="mb-1">© 2018-2033 forqa</p>
+        <ul class="list-inline">
+          <li class="list-inline-item"><a href="#">Privacy</a></li>
+          <li class="list-inline-item"><a href="#">Terms</a></li>
+          <li class="list-inline-item"><a href="#">Support</a></li>
+        </ul>
+      </footer>
+    </div>
+  </body>
+</html>
