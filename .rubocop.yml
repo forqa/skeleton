@@ -1,0 +1,26 @@
+Style/Tab:
+  Enabled: false
+
+Layout/IndentationWidth:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
+
+Metrics/ClassLength:
+  Enabled: false
+
+Layout/IndentationConsistency:
+  Enabled: false
+
+Layout/AlignHash:
+  Enabled: false
+
+Metrics/AbcSize:
+  Enabled: false
+
+Layout/AlignParameters:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false

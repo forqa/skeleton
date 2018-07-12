@@ -5,3 +5,6 @@
 /attach/
 /Attachments/
 /XCResults/
+*.png
+/.idea/
+/pkg/

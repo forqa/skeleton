@@ -50,7 +50,7 @@ describe IOS do
     expect(@ios.send(:code_generation,
                       method_name: 'name',
                       locator_type: IOS::ACC_ID,
-                      value: "value")).not_to be_nil
+                      locator_value: "value")).not_to be_nil
   end
 
   it "should create locator by id" do

@@ -1,16 +1,16 @@
 class IOS < Base
   ACC_ID = {
-             java: :AccessibilityId,
-             ruby: :accessibility_id
-           }
+    java: :AccessibilityId,
+    ruby: :accessibility_id
+  }.freeze
   NSPREDICATE = {
-                  java: :iOSNsPredicateString,
-                  ruby: :predicate
-                }
-  IDENTIFIER = 'identifier'
-  LABEL = 'label'
-  XCRESULTS_FOLDER = "#{ROOT_DIR}/XCResults"
-  XCODEPROJ_FOLDER = "#{ROOT_DIR}/xcodeproj"
+    java: :iOSNsPredicateString,
+    ruby: :predicate
+  }.freeze
+  IDENTIFIER = 'identifier'.freeze
+  LABEL = 'label'.freeze
+  XCRESULTS_FOLDER = "#{ROOT_DIR}/XCResults".freeze
+  XCODEPROJ_FOLDER = "#{ROOT_DIR}/xcodeproj".freeze
 
   attr_accessor :platform, :udid, :bundle_id
 
@@ -18,6 +18,7 @@ class IOS < Base
     self.platform = options.platform
     self.udid = options.udid
     self.bundle_id = options.bundle
+    @language = Language.new
   end
 
   def skeletoner
@@ -47,7 +48,7 @@ class IOS < Base
     method_name = locator.strip
     code_generation(method_name: method_name,
                     locator_type: ACC_ID,
-                    value: locator)
+                    locator_value: locator)
   end
 
   def create_locator_by_label(text, type)
@@ -55,7 +56,7 @@ class IOS < Base
     locator = "#{LABEL} like '#{text}'"
     code_generation(method_name: method_name,
                     locator_type: NSPREDICATE,
-                    value: locator)
+                    locator_value: locator)
   end
 
   def create_page_objects
@@ -82,11 +83,14 @@ class IOS < Base
     locator.nil? ? '' : locator[1]
   end
 
-  def code_generation(method_name:, locator_type:, value:)
-    java = java(method_name, locator_type, value)
+  def code_generation(method_name:, locator_type:, locator_value:)
+    java = @language.java(camel_method_name: camel_style(method_name),
+                          locator_type: locator_type,
+                          locator_value: locator_value)
+    ruby = @language.ruby(snake_method_name: snake_style(method_name),
+                          locator_type: locator_type,
+                          locator_value: locator_value)
     save(code: java, format: Language::JAVA)
-
-    ruby = ruby(method_name, locator_type, value)
     save(code: ruby, format: Language::RUBY)
   end
 
@@ -94,24 +98,23 @@ class IOS < Base
     if @page_source.nil?
       log.info('Getting screen source tree ⚒')
       FileUtils.rm_rf(XCRESULTS_FOLDER)
-      start_grep, end_grep = 'start_grep_tag', 'end_grep_tag'
+      start_grep = 'start_grep_tag'
+      end_grep = 'end_grep_tag'
       ios_arch = @simulator ? 'iOS Simulator' : 'iOS'
       @page_source = `xcodebuild test \
-                        -project #{XCODEPROJ_FOLDER}/Skeleton.xcodeproj \
-                        -scheme Skeleton \
-                        -destination 'platform=#{ios_arch},id=#{@udid}' \
-                        -resultBundlePath #{XCRESULTS_FOLDER} \
-                        bundle_id="#{@bundle_id}" | \
-                        awk '/#{start_grep}/,/#{end_grep}/'`
+          -project #{XCODEPROJ_FOLDER}/Skeleton.xcodeproj \
+          -scheme Skeleton \
+          -destination 'platform=#{ios_arch},id=#{@udid}' \
+          -resultBundlePath #{XCRESULTS_FOLDER} \
+          bundle_id="#{@bundle_id}" | \
+          awk '/#{start_grep}/,/#{end_grep}/'`
       @page_source.slice!(start_grep)
       @page_source.slice!(end_grep)
       if @page_source.empty?
-        log.fatal(
-            "Something went wrong.\n" \
+        log.fatal("Something went wrong.\n" \
             "1. Try to sign Skeleton in #{XCODEPROJ_FOLDER}\n" \
             "2. Check in the iOS settings that Skeleton is trust developer.\n" \
-            '3. Check your app bundle_id'
-        )
+            '3. Check your app bundle_id')
         raise
       end
       log.info('Successfully getting Screen Source Tree 🔥')
@@ -120,15 +123,13 @@ class IOS < Base
   end
 
   def check_udid
-    if @simulator.nil?
-      log.info('Checking iOS UDID 👨‍💻')
-      simulators = `xcrun simctl list`
-      @simulator = simulators.include?(@udid)
-      if !@simulator && !`instruments -s devices`.include?(@udid)
-        log.fatal("No such devices with UDID: #{@udid}")
-        raise
-      end
-    end
+    return unless @simulator.nil?
+    log.info('Checking iOS UDID 👨‍💻')
+    simulators = `xcrun simctl list`
+    @simulator = simulators.include?(@udid)
+    return if @simulator || `instruments -s devices`.include?(@udid)
+    log.fatal("No such devices with UDID: #{@udid}")
+    raise
   end
 
   def save_screenshot

@@ -1,28 +1,28 @@
-module Language
+class Language
   JAVA = 'java'
   RUBY = 'rb'
   PYTHON = 'py'
 
-  def java(method_name, locator_type, value)
+  def java(camel_method_name:, locator_type:, locator_value:)
     <<~JAVA
-      By #{camel_style(method_name)}() {
-        return MobileBy.#{locator_type[:java]}("#{value}");
+      By #{camel_method_name}() {
+        return MobileBy.#{locator_type[:java]}("#{locator_value}");
       }
 
     JAVA
   end
 
-  def ruby(method_name, locator_type, value)
+  def ruby(snake_method_name:, locator_type:, locator_value:)
     <<~RUBY
-      def #{snake_style(method_name)}
-        return :#{locator_type[:ruby]}, "#{value}"
+      def #{snake_method_name}
+        return :#{locator_type[:ruby]}, "#{locator_value}"
       end
 
     RUBY
   end
 
-  def language_type(lang:)
-    case lang
+  def type(format)
+    case format
     when 'ruby'
       RUBY
     when 'java'
@@ -30,7 +30,7 @@ module Language
     when 'python'
       PYTHON
     else
-      "I haven't this language"
+      "I haven't this language format"
     end
   end
 end

@@ -3,6 +3,9 @@ require 'fileutils'
 require 'nokogiri'
 require 'logger'
 require 'colorize'
+require 'mini_magick'
+require_relative 'skeleton/languages.rb'
+require_relative 'skeleton/root.rb'
 require_relative 'skeleton/version'
 require_relative 'skeleton/base'
 require_relative 'skeleton/ios'
@@ -10,8 +13,6 @@ require_relative 'skeleton/android'
 
 module Skeleton
 	class Skeleton
-		include Language
-
 	  attr_accessor :platform, :udid, :bundle_id
 
 	  def initialize(options)
@@ -30,39 +31,55 @@ module Skeleton
 	  end
 
 	  def udid=(udid)
-	    if udid.nil?
-	      raise 'Not set udid [-u arg]'
-	    end
+      raise 'Not set udid [-u arg]' if udid.nil?
 	    @udid = udid
 	  end
 
 	  def bundle_id=(bundle_id)
-	    if @platform == 'ios' && bundle_id.nil?
-	      raise 'Not set bundle_id [-b arg]'
-	    end
+      raise 'Not set bundle_id [-b arg]' if @platform == 'ios' && bundle_id.nil?
 	    @bundle_id = bundle_id
 	  end
 
-	  def run
+    def run
 			@driver.clear
 			@driver.precondition
 			@driver.skeletoner
 			fill_html
-			@driver.log.info('Get it: http://localhost:4567/index.html 😍')
-		end
+			open_url
+    end
 
 		def fill_html
-			languages = ['ruby', 'java']
-			languages.each do |lang|
-				type = language_type(lang: lang)
-				@pageobject = File.read(Dir["#{Base::PAGE_OBJECTS_FOLDER}/*.#{type}"].first)
-				@elements_tree = File.read(Dir["#{Base::PAGE_OBJECTS_FOLDER}/*.xml"].first)
-				screenshot = Dir["#{Base::ATTACHMENTS_FOLDER}/*.png"].first
-				FileUtils.cp_r(screenshot, "../html/screenshot.png")
+			language = Language.new
+			%w[ruby java].each do |lang|
+        attach_image
+				type = language.type(lang)
+        folder = Base::PAGE_OBJECTS_FOLDER
+				@pageobject = File.read(Dir["#{folder}/*.#{type}"].first)
+				@elements_tree = File.read(Dir["#{folder}/*.xml"].first)
+        if @driver.class == Android
+          @elements_tree = Nokogiri::XML(@elements_tree).to_s
+          @elements_tree.gsub!('<', '&lt;')
+          @elements_tree.gsub!('>', '&gt;')
+        end
 				template = File.read('../html/template.html.erb')
 				result = ERB.new(template).result(binding)
 				File.open("../html/#{lang}.html", 'w+') { |f| f.write(result) }
 			end
+    end
+
+    def attach_image
+      screenshot = Dir["#{Base::ATTACHMENTS_FOLDER}/*.png"].first
+      image = MiniMagick::Image.new(screenshot)
+      image.rotate(90) if image.width > image.height
+      FileUtils.cp_r(screenshot, '../html/screenshot.png')
+    rescue MiniMagick::Error => e
+      @driver.log.error(e)
+    end
+
+		def open_url
+			url = 'http://localhost:4567/index.html'
+			`open #{url}`
+			@driver.log.info("Look at your pretty page objects: #{url} 😍")
 		end
 
 	  def ios?

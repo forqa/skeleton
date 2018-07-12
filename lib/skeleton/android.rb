@@ -1,16 +1,23 @@
 class Android < Base
-  RESOURCE_ID = 'resource-id'
-  CONTENT_DESC = 'content-desc'
-  TEXT = 'text'
-  ID = { java: :id }
-  XPATH = { java: :xpath }
-  CLASS = 'class'
+  RESOURCE_ID = 'resource-id'.freeze
+  CONTENT_DESC = 'content-desc'.freeze
+  TEXT = 'text'.freeze
+  CLASS = 'class'.freeze
+  ID = {
+    java: :id,
+    ruby: :id
+  }.freeze
+  XPATH = {
+    java: :xpath,
+    ruby: :xpath
+  }.freeze
 
   attr_accessor :platform, :udid
 
   def initialize(options)
     self.platform = options.platform
     self.udid = options.udid
+    @language = Language.new
   end
 
   def skeletoner
@@ -28,7 +35,7 @@ class Android < Base
     method_name.slice!(/.*id\//)
     code_generation(method_name: method_name,
                     locator_type: ID,
-                    value: line[RESOURCE_ID])
+                    locator_value: line[RESOURCE_ID])
   end
 
   def create_locator_by_content_desc(line)
@@ -37,7 +44,7 @@ class Android < Base
     locator = "//#{line[CLASS]}[@#{CONTENT_DESC}='#{line[CONTENT_DESC]}']"
     code_generation(method_name: method_name,
                     locator_type: XPATH,
-                    value: locator)
+                    locator_value: locator)
   end
 
   def create_locator_by_text(line)
@@ -46,7 +53,7 @@ class Android < Base
     locator = "//#{line[CLASS]}[@#{TEXT}='#{line[TEXT]}'"
     code_generation(method_name: method_name,
                     locator_type: XPATH,
-                    value: locator)
+                    locator_value: locator)
   end
 
   def create_locator(line)
@@ -65,9 +72,15 @@ class Android < Base
     page_source_html.css('node').each { |line| create_locator(line) }
   end
 
-  def code_generation(method_name:, locator_type:, value:)
-    java = java(method_name, locator_type, value)
+  def code_generation(method_name:, locator_type:, locator_value:)
+    java = @language.java(camel_method_name: camel_style(method_name),
+                          locator_type: locator_type,
+                          locator_value: locator_value)
+    ruby = @language.ruby(snake_method_name: snake_style(method_name),
+                          locator_type: locator_type,
+                          locator_value: locator_value)
     save(code: java, format: Language::JAVA)
+    save(code: ruby, format: Language::RUBY)
   end
 
   def page_source

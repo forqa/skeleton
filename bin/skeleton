@@ -34,8 +34,10 @@ module Skeleton
 		c.syntax = 'skeleton server'
 		c.description = 'Run skeleton web-server'
 		c.example 'description', 'skeleton server'
-		c.action do |_args, _options|
-			system('cd ../html/ && ruby server.rb')
+		c.option '-p', '--port PORT', String, 'Set web-server port'
+		c.action do |_args, options|
+			options.default(port: 4567)
+			system("cd ../html/ && ruby server.rb #{options.port}")
 		end
 	end
 end
