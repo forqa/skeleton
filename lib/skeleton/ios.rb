@@ -1,11 +1,15 @@
 class IOS < Base
   ACC_ID = {
     java: :AccessibilityId,
-    ruby: :accessibility_id
+    ruby: :accessibility_id,
+    javascript: :id,
+    python: :find_element_by_accessibility_id
   }.freeze
   NSPREDICATE = {
     java: :iOSNsPredicateString,
-    ruby: :predicate
+    ruby: :predicate,
+    javascript: :predicate,
+    python: :find_element_by_ios_predicate
   }.freeze
   IDENTIFIER = 'identifier'.freeze
   LABEL = 'label'.freeze
@@ -90,8 +94,16 @@ class IOS < Base
     ruby = @language.ruby(snake_method_name: snake_style(method_name),
                           locator_type: locator_type,
                           locator_value: locator_value)
+    python = @language.python(snake_method_name: snake_style(method_name),
+                              locator_type: locator_type,
+                              locator_value: locator_value)
+    js = @language.js(camel_method_name: camel_style(method_name),
+                      locator_type: locator_type,
+                      locator_value: locator_value)
     save(code: java, format: Language::JAVA)
     save(code: ruby, format: Language::RUBY)
+    save(code: python, format: Language::PYTHON)
+    save(code: js, format: Language::JAVASCRIPT)
   end
 
   def page_source

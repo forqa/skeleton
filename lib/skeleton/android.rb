@@ -5,11 +5,15 @@ class Android < Base
   CLASS = 'class'.freeze
   ID = {
     java: :id,
-    ruby: :id
+    ruby: :id,
+    javascript: :id,
+    python: :find_element_by_id
   }.freeze
   XPATH = {
     java: :xpath,
-    ruby: :xpath
+    ruby: :xpath,
+    javascript: :xpath,
+    python: :find_element_by_xpath
   }.freeze
 
   attr_accessor :platform, :udid
@@ -79,8 +83,16 @@ class Android < Base
     ruby = @language.ruby(snake_method_name: snake_style(method_name),
                           locator_type: locator_type,
                           locator_value: locator_value)
+    python = @language.python(snake_method_name: snake_style(method_name),
+                              locator_type: locator_type,
+                              locator_value: locator_value)
+    js = @language.js(camel_method_name: camel_style(method_name),
+                      locator_type: locator_type,
+                      locator_value: locator_value)
     save(code: java, format: Language::JAVA)
     save(code: ruby, format: Language::RUBY)
+    save(code: python, format: Language::PYTHON)
+    save(code: js, format: Language::JAVASCRIPT)
   end
 
   def page_source
