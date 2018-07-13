@@ -2,6 +2,7 @@
 
 require 'commander/import'
 require_relative '../lib/skeleton'
+require_relative '../lib/skeleton/root'
 
 module Skeleton
 	program :version, VERSION
@@ -37,7 +38,7 @@ module Skeleton
 		c.option '-p', '--port PORT', String, 'Set web-server port'
 		c.action do |_args, options|
 			options.default(port: 4567)
-			system("cd ../html/ && ruby server.rb #{options.port}")
+			system("ruby #{Base::ROOT_DIR}/html/server.rb #{options.port}")
 		end
 	end
 end

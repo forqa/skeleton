@@ -61,9 +61,9 @@ module Skeleton
           @elements_tree.gsub!('<', '&lt;')
           @elements_tree.gsub!('>', '&gt;')
         end
-				template = File.read('../html/template.html.erb')
+				template = File.read("#{Base::ROOT_DIR}/html/template.html.erb")
 				result = ERB.new(template).result(binding)
-				File.open("../html/#{lang}.html", 'w+') { |f| f.write(result) }
+				File.open("#{Base::ROOT_DIR}/html/#{lang}.html", 'w+') { |f| f.write(result) }
 			end
     end
 
@@ -71,7 +71,7 @@ module Skeleton
       screenshot = Dir["#{Base::ATTACHMENTS_FOLDER}/*.png"].first
       image = MiniMagick::Image.new(screenshot)
       image.rotate(90) if image.width > image.height
-      FileUtils.cp_r(screenshot, '../html/screenshot.png')
+      FileUtils.cp_r(screenshot, "#{Base::ROOT_DIR}/html/screenshot.png")
     rescue MiniMagick::Error => e
       @driver.log.error(e)
     end
