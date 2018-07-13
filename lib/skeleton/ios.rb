@@ -28,6 +28,7 @@ class IOS < Base
   def skeletoner
     log.info('We starting to skeleton your screen 🚀')
     check_udid
+    check_bundle
     page_source
     create_page_objects
     save_screenshot
@@ -123,10 +124,9 @@ class IOS < Base
       @page_source.slice!(start_grep)
       @page_source.slice!(end_grep)
       if @page_source.empty?
-        log.fatal("Something went wrong.\n" \
-            "1. Try to sign Skeleton in #{XCODEPROJ_FOLDER}\n" \
-            "2. Check in the iOS settings that Skeleton is trust developer.\n" \
-            '3. Check your app bundle_id')
+        log.fatal("Try to sign Skeleton in #{XCODEPROJ_FOLDER}.\n" \
+                  'For more info read: https://github.com/forqa/skeleton/' \
+                  'blob/master/docs/real-ios-device-config.md')
         raise
       end
       log.info('Successfully getting Screen Source Tree 🔥')
@@ -141,6 +141,18 @@ class IOS < Base
     @simulator = simulators.include?(@udid)
     return if @simulator || `instruments -s devices`.include?(@udid)
     log.fatal("No such devices with UDID: #{@udid}")
+    raise
+  end
+
+  def check_bundle
+    if @simulator
+      return if `xcrun simctl appinfo #{@udid} #{@bundle_id}`
+                    .include?("CFBundleName")
+    else
+      return if `ideviceinstaller -u #{@udid} -l`
+                    .include?(@bundle_id)
+    end
+    log.fatal("No such apps with bundle_id: #{@bundle_id}")
     raise
   end
 

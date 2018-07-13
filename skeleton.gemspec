@@ -30,6 +30,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "colorize", "~> 0.8.1"
   spec.add_dependency "mini_magick", "~> 4.8.0"
   spec.add_dependency "nokogiri", "~> 1.8.2"
+  spec.add_dependency "sinatra", "~> 2.0.3"
   spec.add_dependency "fileutils"
   spec.add_dependency "commander"
 end
