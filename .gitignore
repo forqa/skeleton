@@ -1,10 +1,13 @@
 .DS_Store
-*.lock
-*.xcuserdatad
+/.idea/
+/pkg/
 /PageObjects/
 /attach/
 /Attachments/
 /XCResults/
+*.lock
+*.xcuserdatad
 *.png
-/.idea/
-/pkg/
+*.html
+!index.html
+port

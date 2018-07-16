@@ -77,9 +77,12 @@ module Skeleton
     end
 
 		def open_url
-			url = 'http://localhost:4567/index.html'
+      port = File.read("#{Base::ROOT_DIR}/html/port")
+			url = "http://localhost:#{port}/index.html"
 			`open #{url}`
-			@driver.log.info("Look at your pretty page objects: #{url} 😍")
+			@driver.log.info("Look at your pretty page objects: \n#{url} 😍")
+    rescue Errno::ENOENT => err
+      @driver.log.error("Something went wrong with skeleton server 💩\n#{err}")
 		end
 
 	  def ios?
