@@ -85,7 +85,21 @@ class IOS < Base
 
   def locator_by_label(line)
     locator = /#{LABEL}: '(.*?)'/.match(line)
-    locator.nil? ? '' : locator[1]
+    if locator.nil?
+      ''
+    else
+      label = locator[1]
+      i = 0
+      label.each_char do |char|
+        if char =~ /(\"|\')/
+          new_value = "\\#{char}"
+          label[i] = new_value
+          i += new_value.length - 1
+        end
+        i += 1
+      end
+      label
+    end
   end
 
   def code_generation(method_name:, locator_type:, locator_value:)

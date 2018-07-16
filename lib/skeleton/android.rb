@@ -45,7 +45,17 @@ class Android < Base
   def create_locator_by_content_desc(line)
     method_name = "#{line[CLASS]}#{increment_locator_id}"
     method_name.slice!(/.*\./)
-    locator = "//#{line[CLASS]}[@#{CONTENT_DESC}='#{line[CONTENT_DESC]}']"
+    content_desc = line[CONTENT_DESC]
+    i = 0
+    content_desc.each_char do |char|
+      if char =~ /(\"|\')/
+        new_value = "\\#{char}"
+        content_desc[i] = new_value
+        i += new_value.length - 1
+      end
+      i += 1
+    end
+    locator = "//#{line[CLASS]}[@#{CONTENT_DESC}='#{line[CONTENT_DESC]}]']"
     code_generation(method_name: method_name,
                     locator_type: XPATH,
                     locator_value: locator)
@@ -54,7 +64,17 @@ class Android < Base
   def create_locator_by_text(line)
     method_name = "#{line[CLASS]}#{increment_locator_id}"
     method_name.slice!(/.*\./)
-    locator = "//#{line[CLASS]}[@#{TEXT}='#{line[TEXT]}'"
+    text = line[TEXT]
+    i = 0
+    text.each_char do |char|
+      if char =~ /(\"|\')/
+        new_value = "\\#{char}"
+        text[i] = new_value
+        i += new_value.length - 1
+      end
+      i += 1
+    end
+    locator = "//#{line[CLASS]}[@#{TEXT}='#{text}]'"
     code_generation(method_name: method_name,
                     locator_type: XPATH,
                     locator_value: locator)
