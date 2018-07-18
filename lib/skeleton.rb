@@ -56,6 +56,7 @@ module Skeleton
         folder = Base::PAGE_OBJECTS_FOLDER
 				@pageobject = File.read(Dir["#{folder}/*.#{type}"].first)
 				@elements_tree = File.read(Dir["#{folder}/*.xml"].first)
+				@build_version = "v#{VERSION}"
         if @driver.class == Android
           @elements_tree = Nokogiri::XML(@elements_tree).to_s
           @elements_tree.gsub!('<', '&lt;')

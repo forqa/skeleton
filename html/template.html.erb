@@ -14,13 +14,13 @@
       </div>
       <div class="row" style="min-height: 666px;">
         <div class="col-md-4 mb-4">
-          <div class="aside" style="max-height: 666px;">
-            <div class="aside__img" style="background-image: url(screenshot.png);"></div>
+          <div class="aside" style="max-height: 670px;">
+            <div class="aside__img" style="background-image: url(screenshot.png); outline: 1px solid gray;"></div>
           </div>
         </div>
         <div class="col-md-8">
           <h4 class="mb-3">Page Objects:</h4>
-          <div class="content" id="content">
+          <div class="content" id="content" style="max-height: 670px; overflow-y: auto;">
             <pre><code><%= @pageobject %></code></pre>
           </div>
         </div>
@@ -31,10 +31,10 @@
           </div>
         </div>
       </div>
-      <footer class="my-5 pt-5 text-muted text-center text-small">
-        <p class="mb-1">© 2018 <a href="https://github.com/forqa">forqa</a></p>
-        <p class="mb-1"><a href="https://github.com/alter-al">alter-al</a></p>
-        <ul class="list-inline"></ul>
+      <footer class="my-2 pt-5 text-muted text-small">
+        <p class="mb-1 text-center">© 2018 <a href="https://github.com/forqa">forqa</a></p>
+        <p class="mb-1 text-center"><a href="https://github.com/alter-al">alter-al</a></p>
+        <p class="mb-1 text-right"><a href="https://github.com/forqa/skeleton/releases/tag/<%= @build_version %>"><%= @build_version %></a></p>
       </footer>
     </div>
   </body>

@@ -58,7 +58,7 @@ class IOS < Base
 
   def create_locator_by_label(text, type)
     method_name = "#{type}#{increment_locator_id}"
-    locator = "#{LABEL} like '#{text}'"
+    locator = "#{LABEL} LIKE '#{text}'"
     code_generation(method_name: method_name,
                     locator_type: NSPREDICATE,
                     locator_value: locator)
