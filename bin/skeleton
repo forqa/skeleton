@@ -15,7 +15,9 @@ module Skeleton
 	  c.option '-p', '--platform PLATFORM', String, 'Set device platform: android or ios'
 	  c.option '-u', '--udid UDID', String, 'Set device UDID'
 	  c.option '-b', '--bundle BUNDLE', String, 'Set Bundle ID for your app [required for iOS]'
+	  c.option '--[no-]browser', "Not open the browser at the end of skeleton's work"
 	  c.action do |_args, options|
+			options.default(browser: true)
 	    Skeleton.new(options).run
 	  end
 	end

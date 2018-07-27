@@ -138,9 +138,10 @@ class IOS < Base
       @page_source.slice!(start_grep)
       @page_source.slice!(end_grep)
       if @page_source.empty?
-        log.fatal("Try to sign Skeleton in #{XCODEPROJ_FOLDER}.\n" \
-                  'For more info read: https://github.com/forqa/skeleton/' \
-                  'blob/master/docs/real-ios-device-config.md')
+        log.fatal("Try to sign Skeleton and SkeletonUI targets in " \
+                  "#{XCODEPROJ_FOLDER}/Skeleton.xcodeproj \n" \
+                  'For more info read: https://github.com/alter-al/' \
+                  'skeleton/blob/master/docs/real-ios-device-config.md')
         raise
       end
       log.info('Successfully getting Screen Source Tree 🔥')
@@ -164,7 +165,7 @@ class IOS < Base
                     .include?("CFBundleName")
     else
       return if `ideviceinstaller -u #{@udid} -l`
-                    .include?(@bundle_id)
+                    .include?("#{@bundle_id},")
     end
     log.fatal("No such apps with bundle_id: #{@bundle_id}")
     raise

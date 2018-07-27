@@ -13,12 +13,13 @@ require_relative 'skeleton/android'
 
 module Skeleton
 	class Skeleton
-	  attr_accessor :platform, :udid, :bundle_id
+	  attr_accessor :platform, :udid, :bundle_id, :browser
 
 	  def initialize(options)
 	    self.platform = options.platform
 	    self.udid = options.udid
 	    self.bundle_id = options.bundle
+	    self.browser = options.browser
 	    @driver = ios? ? IOS.new(options) : Android.new(options)
 	  end
 
@@ -54,7 +55,7 @@ module Skeleton
         attach_image
 				type = language.type(lang)
         folder = Base::PAGE_OBJECTS_FOLDER
-				@pageobject = File.read(Dir["#{folder}/*.#{type}"].first)
+				@screen_objects = File.read(Dir["#{folder}/*.#{type}"].first)
 				@elements_tree = File.read(Dir["#{folder}/*.xml"].first)
 				@build_version = "v#{VERSION}"
         if @driver.class == Android
@@ -72,15 +73,16 @@ module Skeleton
       screenshot = Dir["#{Base::ATTACHMENTS_FOLDER}/*.png"].first
       image = MiniMagick::Image.new(screenshot)
       image.rotate(90) if image.width > image.height
-      FileUtils.cp_r(screenshot, "#{Base::ROOT_DIR}/html/screenshot.png")
     rescue MiniMagick::Error => e
       @driver.log.error(e)
+		ensure
+			FileUtils.cp_r(screenshot, "#{Base::ROOT_DIR}/html/screenshot.png")
     end
 
 		def open_url
       port = File.read("#{Base::ROOT_DIR}/html/port")
-			url = "http://localhost:#{port}/index.html"
-			`open #{url}`
+			url = "http://localhost:#{port}/skeleton"
+			`open #{url}` if @browser
 			@driver.log.info("Look at your pretty page objects: \n#{url} 😍")
     rescue Errno::ENOENT => err
       @driver.log.error("Something went wrong with skeleton server 💩\n#{err}")

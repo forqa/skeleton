@@ -9,6 +9,11 @@ class Base
     FileUtils.rm_rf("#{ROOT_DIR}/html/screenshot.png")
     FileUtils.mkdir_p(PAGE_OBJECTS_FOLDER)
     FileUtils.mkdir_p(ATTACHMENTS_FOLDER)
+  rescue
+    log.fatal("Advice you to use not system ruby \n" \
+              'For more info read: https://github.com/alter-al/' \
+              'skeleton/blob/master/docs/permissions_error.md')
+    raise
   end
 
   def log

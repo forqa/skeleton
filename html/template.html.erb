@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="/index.css"/>
   </head>
+  <a href="skeleton">&#8592 home</a>
   <body class="bg-light" style="background: linear-gradient(white, lightblue);">
     <div class="container-fluid">
       <div class="py-5 text-center">
@@ -19,9 +20,9 @@
           </div>
         </div>
         <div class="col-md-8">
-          <h4 class="mb-3">Page Objects:</h4>
+          <h4 class="mb-3">Screen Objects:</h4>
           <div class="content" id="content" style="max-height: 670px; overflow-y: auto;">
-            <pre><code><%= @pageobject %></code></pre>
+            <pre><code><%= @screen_objects %></code></pre>
           </div>
         </div>
         <div class="col-md-12">
@@ -32,9 +33,8 @@
         </div>
       </div>
       <footer class="my-2 pt-5 text-muted text-small">
-        <p class="mb-1 text-center">© 2018 <a href="https://github.com/forqa">forqa</a></p>
-        <p class="mb-1 text-center"><a href="https://github.com/alter-al">alter-al</a></p>
-        <p class="mb-1 text-right"><a href="https://github.com/forqa/skeleton/releases/tag/<%= @build_version %>"><%= @build_version %></a></p>
+        <p class="mb-1 text-center">© 2018 <a href="https://github.com/alter-al">alter-al</a></p>
+        <p class="mb-1 text-right"><a href="https://github.com/alter-al/skeleton/releases/tag/<%= @build_version %>"><%= @build_version %></a></p>
       </footer>
     </div>
   </body>

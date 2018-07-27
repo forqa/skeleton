@@ -67,6 +67,9 @@ Usage:
             
             -b, --bundle BUNDLE
             Set Bundle ID for your app [required for iOS]
+            
+            --[no-]browser
+            Not open the browser at the end of skeleton's work
         
         $ skeleton clear --help
             
