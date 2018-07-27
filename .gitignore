@@ -9,5 +9,5 @@
 *.xcuserdatad
 *.png
 *.html
-!index.html
+!skeleton.html
 port
