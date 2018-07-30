@@ -16,20 +16,24 @@ class Android < Base
     python: :find_element_by_xpath
   }.freeze
 
-  attr_accessor :platform, :udid
+  attr_accessor :udid
 
   def initialize(options)
-    self.platform = options.platform
     self.udid = options.udid
     @language = Language.new
   end
 
   def skeletoner
     log.info('We starting to skeleton your screen 🚀')
+    check_udid
     create_page_objects
     save_screenshot
     save(code: page_source)
     log.info('We successfully skeletoned your screen 👻')
+  end
+
+  def devices
+    `adb devices`.scan(/\n(.*)\t/).flatten
   end
 
   private
@@ -131,9 +135,17 @@ class Android < Base
 
   def save_screenshot
     log.info('Saving screenshot 📷')
-    file_name = "#{@platform}_#{TIMESTAMP}.png"
+    file_name = "android_#{TIMESTAMP}.png"
     `adb -s #{@udid} shell screencap -p /sdcard/#{file_name}`
     `adb -s #{@udid} pull /sdcard/#{file_name} #{ATTACHMENTS_FOLDER}/`
     `adb -s #{@udid} shell rm /sdcard/#{file_name}`
+  end
+
+  def check_udid
+    log.info('Checking Android udid 👨‍💻')
+    @udid = devices.first if @udid.nil? && devices.size == 1
+    return if devices.include?(@udid)
+    log.fatal("No such devices with udid: #{@udid}")
+    raise
   end
 end

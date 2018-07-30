@@ -17,8 +17,6 @@ module Skeleton
 
 	  def initialize(options)
 	    self.platform = options.platform
-	    self.udid = options.udid
-	    self.bundle_id = options.bundle
 	    self.browser = options.browser
 	    @driver = ios? ? IOS.new(options) : Android.new(options)
 	  end
@@ -29,16 +27,6 @@ module Skeleton
 	      raise 'Set platform, ios or android [-p arg]'
 	    end
 	    @platform = platform
-	  end
-
-	  def udid=(udid)
-      raise 'Not set udid [-u arg]' if udid.nil?
-	    @udid = udid
-	  end
-
-	  def bundle_id=(bundle_id)
-      raise 'Not set bundle_id [-b arg]' if @platform == 'ios' && bundle_id.nil?
-	    @bundle_id = bundle_id
 	  end
 
     def run

@@ -23,6 +23,8 @@ class Base
 
   def skeletoner; end
 
+  def devices; end
+
   def clear
     FileUtils.rm_rf(PAGE_OBJECTS_FOLDER)
     FileUtils.rm_rf(ATTACHMENTS_FOLDER)

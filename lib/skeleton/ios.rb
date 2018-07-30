@@ -16,10 +16,9 @@ class IOS < Base
   XCRESULTS_FOLDER = "#{ROOT_DIR}/XCResults".freeze
   XCODEPROJ_FOLDER = "#{ROOT_DIR}/xcodeproj".freeze
 
-  attr_accessor :platform, :udid, :bundle_id
+  attr_accessor :udid, :bundle_id
 
   def initialize(options)
-    self.platform = options.platform
     self.udid = options.udid
     self.bundle_id = options.bundle
     @language = Language.new
@@ -36,7 +35,16 @@ class IOS < Base
     log.info('We successfully skeletoned your screen 👻')
   end
 
+  def devices
+    `idevice_id -l`.split.uniq.map { |d| d }
+  end
+
   private
+
+  def bundle_id=(bundle_id)
+    raise 'Not set bundle_id [-b arg]' if bundle_id.nil?
+    @bundle_id = bundle_id
+  end
 
   def create_locator(line)
     locator_by_id = locator_by_id(line)
@@ -151,11 +159,14 @@ class IOS < Base
 
   def check_udid
     return unless @simulator.nil?
-    log.info('Checking iOS UDID 👨‍💻')
-    simulators = `xcrun simctl list`
-    @simulator = simulators.include?(@udid)
-    return if @simulator || `instruments -s devices`.include?(@udid)
-    log.fatal("No such devices with UDID: #{@udid}")
+    log.info('Checking iOS udid 👨‍💻')
+    if @udid.nil? && devices.size == 1
+      @udid = devices.first
+    else
+      @simulator = `xcrun simctl list`.include?(@udid)
+    end
+    return if @simulator || devices.include?(@udid)
+    log.fatal("No such devices with udid: #{@udid}")
     raise
   end
 
@@ -174,7 +185,7 @@ class IOS < Base
   def save_screenshot
     log.info('Saving screenshot 📷')
     png_path = "#{XCRESULTS_FOLDER}/Attachments/*.png"
-    new_path = "#{ATTACHMENTS_FOLDER}/#{@platform}_#{TIMESTAMP}.png"
+    new_path = "#{ATTACHMENTS_FOLDER}/ios_#{TIMESTAMP}.png"
     screenshots = Dir[png_path].collect { |png| File.expand_path(png) }
     FileUtils.cp(screenshots[0], new_path)
     FileUtils.rm_rf(XCRESULTS_FOLDER)
