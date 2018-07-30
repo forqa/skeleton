@@ -3,6 +3,7 @@
 require 'commander/import'
 require_relative '../lib/skeleton'
 require_relative '../lib/skeleton/root'
+require_relative '../lib/skeleton/logger'
 
 module Skeleton
 	program :version, VERSION
@@ -27,9 +28,8 @@ module Skeleton
 	  c.description = 'Clear user cache'
 	  c.example 'description', 'skeleton clear'
 	  c.action do |_args, _options|
-			base = Base.new
-	    base.clear
-	    base.log.info("Successfully clear user cache")
+      Base.new.clear
+      Log.info('Successfully clear user cache')
 	  end
 	end
 
@@ -40,7 +40,7 @@ module Skeleton
 		c.option '-p', '--port PORT', String, 'Set web-server port'
 		c.action do |_args, options|
 			options.default(port: 4567)
-			system("ruby #{Base::ROOT_DIR}/html/server.rb #{options.port}")
+			system("ruby #{Base::ROOT_DIR}/server/server.rb #{options.port}")
 		end
 	end
 end

@@ -1,12 +1,12 @@
 require 'erb'
 require 'fileutils'
 require 'nokogiri'
-require 'logger'
 require 'colorize'
 require 'mini_magick'
 require_relative 'skeleton/languages.rb'
 require_relative 'skeleton/root.rb'
 require_relative 'skeleton/version'
+require_relative 'skeleton/logger'
 require_relative 'skeleton/base'
 require_relative 'skeleton/ios'
 require_relative 'skeleton/android'
@@ -51,9 +51,9 @@ module Skeleton
           @elements_tree.gsub!('<', '&lt;')
           @elements_tree.gsub!('>', '&gt;')
         end
-				template = File.read("#{Base::ROOT_DIR}/html/template.html.erb")
+				template = File.read("#{Base::ROOT_DIR}/server/template.server.erb")
 				result = ERB.new(template).result(binding)
-				File.open("#{Base::ROOT_DIR}/html/#{lang}.html", 'w+') { |f| f.write(result) }
+				File.open("#{Base::ROOT_DIR}/server/#{lang}.server", 'w+') { |f| f.write(result) }
 			end
     end
 
@@ -61,19 +61,19 @@ module Skeleton
       screenshot = Dir["#{Base::ATTACHMENTS_FOLDER}/*.png"].first
       image = MiniMagick::Image.new(screenshot)
       image.rotate(90) if image.width > image.height
-    rescue MiniMagick::Error => e
-      @driver.log.error(e)
+    rescue MiniMagick::Error => err
+      Log.warn(err)
 		ensure
-			FileUtils.cp_r(screenshot, "#{Base::ROOT_DIR}/html/screenshot.png")
+			FileUtils.cp_r(screenshot, "#{Base::ROOT_DIR}/server/screenshot.png")
     end
 
 		def open_url
-      port = File.read("#{Base::ROOT_DIR}/html/port")
+      port = File.read("#{Base::ROOT_DIR}/server/port")
 			url = "http://localhost:#{port}/skeleton"
 			`open #{url}` if @browser
-			@driver.log.info("Look at your pretty page objects: \n#{url} 😍")
+			Log.info("Look at your pretty page objects: \n#{url} 😍")
     rescue Errno::ENOENT => err
-      @driver.log.error("Something went wrong with skeleton server 💩\n#{err}")
+      Log.warn("Something went wrong with skeleton server 💩\n#{err}")
 		end
 
 	  def ios?

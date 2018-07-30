@@ -24,12 +24,12 @@ class Android < Base
   end
 
   def skeletoner
-    log.info('We starting to skeleton your screen 🚀')
+    Log.info('We starting to skeleton your screen 🚀')
     check_udid
     create_page_objects
     save_screenshot
     save(code: page_source)
-    log.info('We successfully skeletoned your screen 👻')
+    Log.info('We successfully skeletoned your screen 👻')
   end
 
   def devices
@@ -95,7 +95,7 @@ class Android < Base
   end
 
   def create_page_objects
-    log.info('Generation page objects for your awesome language 💪')
+    Log.info('Generation page objects for your awesome language 💪')
     page_source_html = Nokogiri::HTML.parse(page_source)
     page_source_html.css('node').each { |line| create_locator(line) }
   end
@@ -121,20 +121,20 @@ class Android < Base
 
   def page_source
     unless @page_source
-      log.info('Getting screen source tree ⚒')
+      Log.info('Getting screen source tree ⚒')
       dump = `adb -s #{@udid} shell uiautomator dump | egrep -o '/.*?xml'`
       @page_source = `adb -s #{@udid} shell cat #{dump}`
       if @page_source.empty?
-        log.fatal('Something went wrong. Check your device')
+        Log.error('Something went wrong. Check your device')
         Process.exit(1)
       end
-      log.info('Successfully getting Screen Source Tree 🔥')
+      Log.info('Successfully getting Screen Source Tree 🔥')
     end
     @page_source
   end
 
   def save_screenshot
-    log.info('Saving screenshot 📷')
+    Log.info('Saving screenshot 📷')
     file_name = "android_#{TIMESTAMP}.png"
     `adb -s #{@udid} shell screencap -p /sdcard/#{file_name}`
     `adb -s #{@udid} pull /sdcard/#{file_name} #{ATTACHMENTS_FOLDER}/`
@@ -142,10 +142,10 @@ class Android < Base
   end
 
   def check_udid
-    log.info('Checking Android udid 👨‍💻')
+    Log.info('Checking Android udid 👨‍💻')
     @udid = devices.first if @udid.nil? && devices.size == 1
     return if devices.include?(@udid)
-    log.fatal("No such devices with udid: #{@udid}")
+    Log.error("No such devices with udid: #{@udid}")
     raise
   end
 end

@@ -4,21 +4,15 @@ class Base
   TIMESTAMP = (Time.now.to_f * 1000).to_i
 
   def precondition
-    create_logger
     clear
-    FileUtils.rm_rf("#{ROOT_DIR}/html/screenshot.png")
+    FileUtils.rm_rf("#{ROOT_DIR}/server/screenshot.png")
     FileUtils.mkdir_p(PAGE_OBJECTS_FOLDER)
     FileUtils.mkdir_p(ATTACHMENTS_FOLDER)
   rescue
-    log.fatal("Advice you to use not system ruby \n" \
+    Log.error("Advice you to use not system ruby \n" \
               'For more info read: https://github.com/alter-al/' \
               'skeleton/blob/master/docs/permissions_error.md')
     raise
-  end
-
-  def log
-    create_logger if @log.nil?
-    @log
   end
 
   def skeletoner; end
@@ -35,14 +29,6 @@ class Base
   def save(code:, format: 'xml')
     file_path = "#{PAGE_OBJECTS_FOLDER}/#{@platform}_#{TIMESTAMP}.#{format}"
     File.open(file_path, 'a') { |f| f.write(code) }
-  end
-
-  def create_logger
-    @log = Logger.new(STDOUT)
-    @log.level = Logger::INFO
-    @log.formatter = proc do |severity, datetime, _progname, msg|
-      "[#{severity}] #{datetime}: " + "#{msg}\n".colorize(:light_cyan)
-    end
   end
 
   def snake_style(method_name)

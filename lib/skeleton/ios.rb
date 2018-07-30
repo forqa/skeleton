@@ -25,14 +25,14 @@ class IOS < Base
   end
 
   def skeletoner
-    log.info('We starting to skeleton your screen 🚀')
+    Log.info('We starting to skeleton your screen 🚀')
     check_udid
     check_bundle
     page_source
     create_page_objects
     save_screenshot
     save(code: page_source)
-    log.info('We successfully skeletoned your screen 👻')
+    Log.info('We successfully skeletoned your screen 👻')
   end
 
   def devices
@@ -73,7 +73,7 @@ class IOS < Base
   end
 
   def create_page_objects
-    log.info('Generation page objects for your awesome language 💪')
+    Log.info('Generation page objects for your awesome language 💪')
     page_source.each_line do |line|
       break if line.include?(' StatusBar, ')
       next  if line.include?('Application, ')
@@ -131,7 +131,7 @@ class IOS < Base
 
   def page_source
     if @page_source.nil?
-      log.info('Getting screen source tree ⚒')
+      Log.info('Getting screen source tree ⚒')
       FileUtils.rm_rf(XCRESULTS_FOLDER)
       start_grep = 'start_grep_tag'
       end_grep = 'end_grep_tag'
@@ -146,27 +146,27 @@ class IOS < Base
       @page_source.slice!(start_grep)
       @page_source.slice!(end_grep)
       if @page_source.empty?
-        log.fatal("Try to sign Skeleton and SkeletonUI targets in " \
+        Log.error("Try to sign Skeleton and SkeletonUI targets in " \
                   "#{XCODEPROJ_FOLDER}/Skeleton.xcodeproj \n" \
                   'For more info read: https://github.com/alter-al/' \
                   'skeleton/blob/master/docs/real-ios-device-config.md')
         raise
       end
-      log.info('Successfully getting Screen Source Tree 🔥')
+      Log.info('Successfully getting Screen Source Tree 🔥')
     end
     @page_source
   end
 
   def check_udid
     return unless @simulator.nil?
-    log.info('Checking iOS udid 👨‍💻')
+    Log.info('Checking iOS udid 👨‍💻')
     if @udid.nil? && devices.size == 1
       @udid = devices.first
     else
       @simulator = `xcrun simctl list`.include?(@udid)
     end
     return if @simulator || devices.include?(@udid)
-    log.fatal("No such devices with udid: #{@udid}")
+    Log.error("No such devices with udid: #{@udid}")
     raise
   end
 
@@ -178,12 +178,12 @@ class IOS < Base
       return if `ideviceinstaller -u #{@udid} -l`
                     .include?("#{@bundle_id},")
     end
-    log.fatal("No such apps with bundle_id: #{@bundle_id}")
+    Log.error("No such apps with bundle_id: #{@bundle_id}")
     raise
   end
 
   def save_screenshot
-    log.info('Saving screenshot 📷')
+    Log.info('Saving screenshot 📷')
     png_path = "#{XCRESULTS_FOLDER}/Attachments/*.png"
     new_path = "#{ATTACHMENTS_FOLDER}/ios_#{TIMESTAMP}.png"
     screenshots = Dir[png_path].collect { |png| File.expand_path(png) }

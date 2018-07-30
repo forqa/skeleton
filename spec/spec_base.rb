@@ -24,10 +24,6 @@ describe Base do
     expect(@base.send(:camel_style, 't*!@(){}e:;#$^S[].,\'"t')).to eq('teSt')
   end
 
-  it "should create logger" do
-    expect(@base.log).not_to eq(nil)
-  end
-
   it "should create base folders" do
     @base.precondition
     expect(File.directory?(Base::PAGE_OBJECTS_FOLDER)).to be true
