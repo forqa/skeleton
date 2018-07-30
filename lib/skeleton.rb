@@ -51,9 +51,9 @@ module Skeleton
           @elements_tree.gsub!('<', '&lt;')
           @elements_tree.gsub!('>', '&gt;')
         end
-				template = File.read("#{Base::ROOT_DIR}/server/template.server.erb")
+				template = File.read("#{Base::ROOT_DIR}/server/template.html.erb")
 				result = ERB.new(template).result(binding)
-				File.open("#{Base::ROOT_DIR}/server/#{lang}.server", 'w+') { |f| f.write(result) }
+				File.open("#{Base::ROOT_DIR}/server/#{lang}.html", 'w+') { |f| f.write(result) }
 			end
     end
 

@@ -12,7 +12,6 @@ class Base
     Log.error("Advice you to use not system ruby \n" \
               'For more info read: https://github.com/alter-al/' \
               'skeleton/blob/master/docs/permissions_error.md')
-    raise
   end
 
   def skeletoner; end

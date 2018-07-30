@@ -12,12 +12,12 @@ end
 
 get '/:file' do
   domain = params[:file].split('.').last
-  file = domain == params[:file] ? "#{domain}.server" : params[:file]
+  file = domain == params[:file] ? "#{domain}.html" : params[:file]
   send_file "#{Base::ROOT_DIR}/server/#{file}"
 end
 
 post '/:file' do
   domain = params[:file].split('.').last
-  file = domain == params[:file] ? "#{domain}.server" : params[:file]
+  file = domain == params[:file] ? "#{domain}.html" : params[:file]
   send_file "#{Base::ROOT_DIR}/server/#{file}"
 end

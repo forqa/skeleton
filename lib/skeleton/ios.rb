@@ -25,9 +25,9 @@ class IOS < Base
   end
 
   def skeletoner
-    Log.info('We starting to skeleton your screen 🚀')
     check_udid
     check_bundle
+    Log.info('We starting to skeleton your screen 🚀')
     page_source
     create_page_objects
     save_screenshot
@@ -150,7 +150,6 @@ class IOS < Base
                   "#{XCODEPROJ_FOLDER}/Skeleton.xcodeproj \n" \
                   'For more info read: https://github.com/alter-al/' \
                   'skeleton/blob/master/docs/real-ios-device-config.md')
-        raise
       end
       Log.info('Successfully getting Screen Source Tree 🔥')
     end
@@ -166,8 +165,11 @@ class IOS < Base
       @simulator = `xcrun simctl list`.include?(@udid)
     end
     return if @simulator || devices.include?(@udid)
-    Log.error("No such devices with udid: #{@udid}")
-    raise
+    if @udid.nil?
+      Log.error("Provide device udid")
+    else
+      Log.error("No such devices with udid: #{@udid}")
+    end
   end
 
   def check_bundle
@@ -179,7 +181,6 @@ class IOS < Base
                     .include?("#{@bundle_id},")
     end
     Log.error("No such apps with bundle_id: #{@bundle_id}")
-    raise
   end
 
   def save_screenshot

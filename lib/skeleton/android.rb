@@ -24,8 +24,8 @@ class Android < Base
   end
 
   def skeletoner
-    Log.info('We starting to skeleton your screen 🚀')
     check_udid
+    Log.info('We starting to skeleton your screen 🚀')
     create_page_objects
     save_screenshot
     save(code: page_source)
@@ -59,7 +59,7 @@ class Android < Base
       end
       i += 1
     end
-    locator = "//#{line[CLASS]}[@#{CONTENT_DESC}='#{line[CONTENT_DESC]}]']"
+    locator = "//#{line[CLASS]}[@#{CONTENT_DESC}='#{line[CONTENT_DESC]}']]"
     code_generation(method_name: method_name,
                     locator_type: XPATH,
                     locator_value: locator)
@@ -78,7 +78,7 @@ class Android < Base
       end
       i += 1
     end
-    locator = "//#{line[CLASS]}[@#{TEXT}='#{text}]'"
+    locator = "//#{line[CLASS]}[@#{TEXT}='#{text}']"
     code_generation(method_name: method_name,
                     locator_type: XPATH,
                     locator_value: locator)
@@ -126,7 +126,6 @@ class Android < Base
       @page_source = `adb -s #{@udid} shell cat #{dump}`
       if @page_source.empty?
         Log.error('Something went wrong. Check your device')
-        Process.exit(1)
       end
       Log.info('Successfully getting Screen Source Tree 🔥')
     end
@@ -145,7 +144,10 @@ class Android < Base
     Log.info('Checking Android udid 👨‍💻')
     @udid = devices.first if @udid.nil? && devices.size == 1
     return if devices.include?(@udid)
-    Log.error("No such devices with udid: #{@udid}")
-    raise
+    if @udid.nil?
+      Log.error("Provide device udid")
+    else
+      Log.error("No such devices with udid: #{@udid}")
+    end
   end
 end
