@@ -141,12 +141,12 @@ class Android < Base
   end
 
   def check_udid
-    Log.info('Checking Android udid 👨‍💻')
+    Log.info('Checking device udid 👨‍💻')
     @udid = devices.first if @udid.nil? && devices.size == 1
     return if devices.include?(@udid)
     if @udid.nil?
-      Log.error("Provide device udid")
-    else
+      Log.error("Provide device udid [-u]")
+    elsif !devices.include?(@udid)
       Log.error("No such devices with udid: #{@udid}")
     end
   end

@@ -156,22 +156,6 @@ class IOS < Base
     @page_source
   end
 
-  def check_udid
-    return unless @simulator.nil?
-    Log.info('Checking iOS udid 👨‍💻')
-    if @udid.nil? && devices.size == 1
-      @udid = devices.first
-    else
-      @simulator = `xcrun simctl list`.include?(@udid)
-    end
-    return if @simulator || devices.include?(@udid)
-    if @udid.nil?
-      Log.error("Provide device udid")
-    else
-      Log.error("No such devices with udid: #{@udid}")
-    end
-  end
-
   def check_bundle
     if @simulator
       return if `xcrun simctl appinfo #{@udid} #{@bundle_id}`
@@ -190,5 +174,20 @@ class IOS < Base
     screenshots = Dir[png_path].collect { |png| File.expand_path(png) }
     FileUtils.cp(screenshots[0], new_path)
     FileUtils.rm_rf(XCRESULTS_FOLDER)
+  end
+
+  def check_udid
+    return unless @simulator.nil?
+    Log.info('Checking device udid 👨‍💻')
+    if @udid.nil? && devices.size == 1
+      @udid = devices.first
+    else
+      @simulator = `xcrun simctl list`.include?(@udid)
+    end
+    if @udid.nil?
+      Log.error("Provide device udid [-u]")
+    elsif !@simulator || !devices.include?(@udid)
+      Log.error("No such devices with udid: #{@udid}")
+    end
   end
 end
