@@ -179,14 +179,10 @@ class IOS < Base
   def check_udid
     return unless @simulator.nil?
     Log.info('Checking device udid 👨‍💻')
-    if @udid.nil? && devices.size == 1
-      @udid = devices.first
-    else
-      @simulator = `xcrun simctl list`.include?(@udid)
-    end
-    if @udid.nil?
-      Log.error("Provide device udid [-u]")
-    elsif !@simulator || !devices.include?(@udid)
+    @simulator = `xcrun simctl list`.include?(@udid) unless @udid.nil?
+    @udid = devices.first if @udid.nil? && devices.size == 1
+    Log.error("Provide device udid [-u]") if @udid.nil?
+    unless @simulator || devices.include?(@udid)
       Log.error("No such devices with udid: #{@udid}")
     end
   end

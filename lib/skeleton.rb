@@ -72,8 +72,9 @@ module Skeleton
 			url = "http://localhost:#{port}/skeleton"
 			`open #{url}` if @browser
 			Log.info("Look at your pretty page objects: \n#{url} 😍")
-    rescue Errno::ENOENT => err
-      Log.warn("Something went wrong with skeleton server 💩\n#{err}")
+    rescue Errno::ENOENT
+      Log.warn('Something went wrong with skeleton server 💩' \
+							 "\nTry to rerun it (:")
 		end
 
 	  def ios?
