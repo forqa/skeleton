@@ -6,8 +6,12 @@ set :port, server_port
 
 File.open("#{Base::ROOT_DIR}/server/port", 'w+') { |f| f.write(server_port) }
 
+not_found do
+  redirect 'skeleton'
+end
+
 get '/' do
-  redirect "skeleton"
+  redirect 'skeleton'
 end
 
 get '/:file' do

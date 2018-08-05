@@ -49,27 +49,30 @@ class IOS < Base
   def create_locator(line)
     locator_by_id = locator_by_id(line)
     locator_by_label = locator_by_label(line)
+    type = element_type(line)
     if !locator_by_id.empty?
-      create_locator_by_id(locator_by_id)
+      create_locator_by_id(locator_by_id, type)
     elsif !locator_by_label.empty?
-      type = element_type(line)
       create_locator_by_label(locator_by_label, type)
     end
   end
 
-  def create_locator_by_id(locator)
+  def create_locator_by_id(locator, type)
     method_name = locator.strip
+    locator_hash = { locator => type }
     code_generation(method_name: method_name,
                     locator_type: ACC_ID,
-                    locator_value: locator)
+                    locator_value: locator_hash,
+                    accessibility_id: true)
   end
 
   def create_locator_by_label(text, type)
     method_name = "#{type}#{increment_locator_id}"
     locator = "#{LABEL} LIKE '#{text}'"
+    locator_hash = { locator => type }
     code_generation(method_name: method_name,
                     locator_type: NSPREDICATE,
-                    locator_value: locator)
+                    locator_value: locator_hash)
   end
 
   def create_page_objects
@@ -110,23 +113,35 @@ class IOS < Base
     end
   end
 
-  def code_generation(method_name:, locator_type:, locator_value:)
-    java = @language.java(camel_method_name: camel_style(method_name),
+  def code_generation(method_name:,
+                      locator_type:,
+                      locator_value:,
+                      accessibility_id: false)
+    method_name = "_#{method_name}" if method_name[0] =~ /\d+/
+    snake_style = snake_style(method_name)
+    camel_style = camel_style(method_name)
+    java = @language.java(camel_method_name: camel_style,
                           locator_type: locator_type,
-                          locator_value: locator_value)
-    ruby = @language.ruby(snake_method_name: snake_style(method_name),
+                          locator_value: locator_value.keys.first)
+    ruby = @language.ruby(snake_method_name: snake_style,
                           locator_type: locator_type,
-                          locator_value: locator_value)
-    python = @language.python(snake_method_name: snake_style(method_name),
+                          locator_value: locator_value.keys.first)
+    python = @language.python(snake_method_name: snake_style,
                               locator_type: locator_type,
-                              locator_value: locator_value)
-    js = @language.js(camel_method_name: camel_style(method_name),
+                              locator_value: locator_value.keys.first)
+    js = @language.js(camel_method_name: camel_style,
                       locator_type: locator_type,
-                      locator_value: locator_value)
+                      locator_value: locator_value.keys.first)
+    xcui_element_type = XCUIElement.types[locator_value.values.first.to_sym]
+    swift = @language.swift(camel_method_name: camel_style,
+                            element_type: xcui_element_type,
+                            locator_value: locator_value.keys.first,
+                            accessibility_id: accessibility_id)
     save(code: java, format: Language::JAVA)
     save(code: ruby, format: Language::RUBY)
     save(code: python, format: Language::PYTHON)
     save(code: js, format: Language::JAVASCRIPT)
+    save(code: swift, format: Language::SWIFT)
   end
 
   def page_source

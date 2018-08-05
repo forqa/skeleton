@@ -5,7 +5,6 @@ class Base
 
   def precondition
     clear
-    FileUtils.rm_rf("#{ROOT_DIR}/server/screenshot.png")
     FileUtils.mkdir_p(PAGE_OBJECTS_FOLDER)
     FileUtils.mkdir_p(ATTACHMENTS_FOLDER)
   rescue
@@ -21,6 +20,7 @@ class Base
   def clear
     FileUtils.rm_rf(PAGE_OBJECTS_FOLDER)
     FileUtils.rm_rf(ATTACHMENTS_FOLDER)
+    FileUtils.rm_rf("#{ROOT_DIR}/server/screenshot.png")
   end
 
   protected

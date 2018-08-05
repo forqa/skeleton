@@ -39,7 +39,9 @@ module Skeleton
 
 		def fill_html
 			language = Language.new
-			%w[ruby java python javascript].each do |lang|
+			languages = %w[ruby java python javascript]
+			languages += %w[swift] if ios?
+			languages.each do |lang|
         attach_image
 				type = language.type(lang)
         folder = Base::PAGE_OBJECTS_FOLDER
