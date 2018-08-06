@@ -49,7 +49,7 @@ class Language
     end
   end
 
-  def type(format)
+  def self.domain(format)
     case format
     when 'ruby', 'rb'
       RUBY
@@ -64,6 +64,10 @@ class Language
     else
       "I haven't this language format"
     end
+  end
+
+  def self.all
+    %w[ruby java python javascript swift]
   end
 end
 

@@ -30,7 +30,6 @@ module Skeleton
 	  end
 
     def run
-			@driver.clear
 			@driver.precondition
 			@driver.skeletoner
 			fill_html
@@ -38,12 +37,10 @@ module Skeleton
     end
 
 		def fill_html
-			language = Language.new
-			languages = %w[ruby java python javascript]
-			languages += %w[swift] if ios?
+			languages = ios? ? Language.all : Language.all - ['swift']
 			languages.each do |lang|
         attach_image
-				type = language.type(lang)
+				type = Language.domain(lang)
         folder = Base::PAGE_OBJECTS_FOLDER
 				@screen_objects = File.read(Dir["#{folder}/*.#{type}"].first)
 				@elements_tree = File.read(Dir["#{folder}/*.xml"].first)
