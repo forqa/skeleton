@@ -81,7 +81,7 @@ Usage:
             
             EXAMPLES:
             
-            skeleton clear
+            skeleton server
             
             OPTIONS:
             
