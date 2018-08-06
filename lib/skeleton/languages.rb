@@ -42,7 +42,7 @@ class Language
     else
       <<~SWIFT
       let #{camel_method_name} = app.#{element_type}.matching(
-        NSPredicate(format: #{locator_value})
+        NSPredicate(format: "#{locator_value}")
       ).element
 
       SWIFT
