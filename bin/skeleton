@@ -39,7 +39,7 @@ module Skeleton
 		c.example 'description', 'skeleton server'
 		c.option '-p', '--port PORT', String, 'Set web-server port'
 		c.action do |_args, options|
-			options.default(port: 4567)
+			options.default(port: 4568)
 			system("ruby #{Base::ROOT_DIR}/server/server.rb #{options.port}")
 		end
 	end
