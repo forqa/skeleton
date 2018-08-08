@@ -21,6 +21,9 @@ class Base
     FileUtils.rm_rf(PAGE_OBJECTS_FOLDER)
     FileUtils.rm_rf(ATTACHMENTS_FOLDER)
     FileUtils.rm_rf("#{ROOT_DIR}/server/screenshot.png")
+    Language.all.each do |lang|
+      FileUtils.rm_rf("#{ROOT_DIR}/server/#{lang}.html")
+    end
   end
 
   protected
