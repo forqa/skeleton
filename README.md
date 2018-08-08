@@ -1,5 +1,5 @@
 # skeleton
-CLI for fast generating multi language page objects from iOS and Android screens.
+Tool for fast generating multi language page objects from iOS and Android screens.
 
 
 Prerequisites:
@@ -32,7 +32,7 @@ Usage:
 
     DESCRIPTION:
 
-    CLI for fast generating multi language page objects from iOS and Android screens.
+    Tool for fast generating multi language page objects from iOS and Android screens.
 
     COMMANDS:
 

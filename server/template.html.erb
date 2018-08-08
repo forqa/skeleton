@@ -4,6 +4,7 @@
     <title>Skeleton</title>
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="/index.css"/>
   </head>
@@ -13,15 +14,27 @@
       <div class="py-5 text-center">
         <h2>Skeleton</h2>
       </div>
-      <div class="row" style="min-height: 666px;">
-        <div class="col-md-4 mb-4">
-          <div class="aside">
-            <div class="aside__img" style="width:100%; height:100%; background-image: url(screenshot.png); outline: 1px solid gray;"></div>
-          </div>
+      <div class="row">
+        <div class="col-md-3">
+          <img id="screenshot" src="screenshot.png" style="width:100%; outline: 1px solid gray;"/>
+          <div id="coordinates" class="md-3 text-right">💀</div>
+          <script>
+              $image = $('#screenshot');
+              imgPos = [
+                  $image.offset().left,
+                  $image.offset().top,
+                  $image.offset().left + $image.outerWidth(),
+                  $image.offset().top + $image.outerHeight()
+              ];
+
+              $image.mousemove(function(e){
+                  $('#coordinates').html((e.pageX-imgPos[0] + 0.5) + ', '+ (Math.round((e.pageY-imgPos[1]) * 1.5)));
+              });
+          </script>
         </div>
-        <div class="col-md-8">
+        <div class="col-md-9">
           <h4 class="mb-3">Screen Objects:</h4>
-          <div class="content" id="content" style="max-height: 666px; overflow-y: auto;">
+          <div class="content" id="content" style="max-height: 456px; overflow-y: auto;">
             <pre><code><%= @screen_objects %></code></pre>
           </div>
         </div>

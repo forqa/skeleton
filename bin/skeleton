@@ -7,7 +7,7 @@ require_relative '../lib/skeleton/logger'
 
 module Skeleton
 	program :version, VERSION
-	program :description, 'CLI for fast generating multi language page objects from iOS and Android screens.'
+	program :description, 'Tool for fast generating multi language page objects from iOS and Android screens.'
 
 	command :scan do |c|
 	  c.syntax = 'skeleton scan [options]'
