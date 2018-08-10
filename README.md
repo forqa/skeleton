@@ -28,65 +28,17 @@ Precondition:
 
 Usage:
 ------
-    $ skeleton --help
-
-    DESCRIPTION:
-
-    Tool for fast generating multi language page objects from iOS and Android screens.
-
-    COMMANDS:
-
-    server  Run skeleton web-server
-    clear   Clear user cache
-    scan    Make screen objects
-
-    GLOBAL OPTIONS:
-
-    -h, --help
-    Display help documentation
-
-    -v, --version
-    Display version information
-
-    -t, --trace
-    Display backtrace when an error occurs
-
-        $ skeleton scan --help
-            
-            EXAMPLES:
-            
-            skeleton scan -p (ios or android) -u 749575366595763538563 -b com.my.bundle
-            
-            OPTIONS:
-            
-            -p, --platform PLATFORM
-            Set device platform: android or ios
-            
-            -u, --udid UDID
-            Set device UDID
-            
-            -b, --bundle BUNDLE
-            Set Bundle ID for your app [required for iOS]
-            
-            --[no-]browser
-            Not open the browser at the end of skeleton's work
-        
-        $ skeleton clear --help
-            
-            EXAMPLES:
-            
-            skeleton clear
-            
-        $ skeleton server --help
-            
-            EXAMPLES:
-            
-            skeleton server
-            
-            OPTIONS:
-            
-            -p, --port PORT
-            Set web-server port
+    1. Start skeleton server:
+        $ skeleton server
+    2. Open device screen
+    3. Scan device screen via skeleton:
+        $ skeleton scan -p android
+        $ skeleton scan -p ios -b "your_app_bundle_id"
+    4. Open page with the generated screen objects on your favorite language
+    
+    For more info use:
+        $ skeleton -h
+        $ skeleton scan -h
     
 Docs:
 ------
