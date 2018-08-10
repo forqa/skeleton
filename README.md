@@ -21,10 +21,6 @@ Prerequisites:
 Installation:
 ------
     $ gem install skeleton-ui
-    
-Precondition:
-------
-    $ skeleton server
 
 Usage:
 ------
@@ -39,15 +35,18 @@ Usage:
     For more info use:
         $ skeleton -h
         $ skeleton scan -h
+        
+Demo:
+------
+
+![Skeleton example](docs/skeleton_example.png)
     
 Docs:
 ------
 
-- [Setting up Skeleton for working with iOS real devices](https://github.com/forqa/skeleton/blob/master/docs/real-ios-device-config.md)
+- [Setting up Skeleton for working with iOS real devices](https://github.com/alter-al/skeleton/blob/master/docs/real-ios-device-config.md)
 - [Setting up RVM for deciding permissions problems](https://github.com/alter-al/skeleton/blob/master/docs/permissions_error.md)
 
 ## License
 
 A tool is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
-
-
