@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["a.alterpesotskiy"]
   spec.email         = ["33gri@bk.ru"]
 
-  spec.summary       = %q{CLI for fast generating multi language page objects from iOS and Android screens.}
+  spec.summary       = %q{Tool for fast generating multi language page objects from iOS (device/simulator) and Android (devices/emulator) screens.}
   spec.homepage      = "https://github.com/forqa/skeleton"
   spec.license       = "MIT"
 

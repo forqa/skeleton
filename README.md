@@ -1,5 +1,5 @@
 # skeleton
-Tool for fast generating multi language page objects from iOS and Android screens.
+Tool for fast generating multi language page objects from iOS (device/simulator) and Android (devices/emulator) screens.
 
 
 Prerequisites:
