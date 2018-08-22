@@ -38,11 +38,15 @@ module Skeleton
 
 		def fill_html
 			languages = ios? ? Language.all : Language.all - ['swift']
-			languages.each do |lang|
+			languages.each_with_index do |lang, index|
         attach_image
 				type = Language.domain(lang)
         folder = Base::PAGE_OBJECTS_FOLDER
-				@screen_objects = File.read(Dir["#{folder}/*.#{type}"].first)
+        begin
+					@screen_objects = File.read(Dir["#{folder}/*.#{type}"].first)
+        rescue TypeError
+      		Log.warn('Failed to find any screen objects 💩') if index.zero?
+        end
 				@elements_tree = File.read(Dir["#{folder}/*.xml"].first)
 				@build_version = "v#{VERSION}"
         if @driver.class == Android
@@ -70,7 +74,7 @@ module Skeleton
       port = File.read("#{Base::ROOT_DIR}/server/port")
 			url = "http://localhost:#{port}/skeleton"
 			`open #{url}` if @browser
-			Log.info("Look at your pretty page objects: \n#{url} 😍")
+			Log.info("Take a peek on #{url} 😍")
     rescue Errno::ENOENT
       Log.warn('Something went wrong with skeleton server 💩' \
 							 "\nTry to rerun it (:")
