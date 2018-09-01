@@ -29,6 +29,7 @@ Usage:
     2. Open device screen
     3. Scan device screen via skeleton:
         $ skeleton scan -p android
+            or
         $ skeleton scan -p ios -b "your_app_bundle_id"
     4. Open page with the generated screen objects on your favorite language
     
