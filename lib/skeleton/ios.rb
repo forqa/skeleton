@@ -184,8 +184,9 @@ class IOS < Base
 
   def save_screenshot
     Log.info('Saving screenshot 📷')
-    png_path = "#{XCRESULTS_FOLDER}/Attachments/*.png"
+    png_path = "#{ATTACHMENTS_FOLDER}/*.png"
     new_path = "#{ATTACHMENTS_FOLDER}/ios_#{TIMESTAMP}.png"
+    `xcparse screenshots #{XCRESULTS_FOLDER} #{ATTACHMENTS_FOLDER}`
     screenshots = Dir[png_path].collect { |png| File.expand_path(png) }
     FileUtils.cp(screenshots[0], new_path)
     FileUtils.rm_rf(XCRESULTS_FOLDER)
