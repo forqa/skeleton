@@ -1,0 +1,31 @@
+name: Test
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  chat:
+    name: Checks
+    timeout-minutes: 15
+    runs-on: [macos-latest]
+    if: |
+      (github.event.pull_request.commits == 1 && !contains(github.event.pull_request.title, '[skip ci]')) ||
+      contains(github.event.pull_request.title, '[run ci]')
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+      - name: Gitleaks
+        run: |
+          brew install gitleaks
+          gitleaks --redact --verbose --pretty --repo-path=.
+      - name: Bundler
+        run: |
+          gem install bundler
+          bundle config path vendor/bundle
+          bundle check || bundle install --jobs 4 --retry 3
+      - name: Rubocop
+        run: bundle exec rubocop
+      - name: Fasterer
+        run: bundle exec fasterer

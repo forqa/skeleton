@@ -36,16 +36,16 @@ module Skeleton
 			open_url
     end
 
-		def fill_html
+    def fill_html
 			languages = ios? ? Language.all : Language.all - ['swift']
 			languages.each_with_index do |lang, index|
         attach_image
 				type = Language.domain(lang)
         folder = Base::PAGE_OBJECTS_FOLDER
         begin
-					@screen_objects = File.read(Dir["#{folder}/*.#{type}"].first)
+				  @screen_objects = File.read(Dir["#{folder}/*.#{type}"].first)
         rescue TypeError
-      		Log.warn('Failed to find any screen objects 💩') if index.zero?
+      	  Log.warn('Failed to find any screen objects 💩') if index.zero?
         end
 				@elements_tree = File.read(Dir["#{folder}/*.xml"].first)
 				@build_version = "v#{VERSION}"
@@ -66,19 +66,18 @@ module Skeleton
       image.rotate(90) if image.width > image.height
     rescue MiniMagick::Error => err
       Log.warn(err)
-		ensure
-			FileUtils.cp_r(screenshot, "#{Base::ROOT_DIR}/server/screenshot.png")
+    ensure
+      FileUtils.cp_r(screenshot, "#{Base::ROOT_DIR}/server/screenshot.png")
     end
 
-		def open_url
+    def open_url
       port = File.read("#{Base::ROOT_DIR}/server/port")
-			url = "http://localhost:#{port}/skeleton"
-			`open #{url}` if @browser
-			Log.info("Take a peek on #{url} 😍")
+      url = "http://localhost:#{port}/skeleton"
+      `open #{url}` if @browser
+      Log.info("Take a peek on #{url} 😍")
     rescue Errno::ENOENT
-      Log.warn('Something went wrong with skeleton server 💩' \
-							 "\nTry to rerun it (:")
-		end
+      Log.warn("Something went wrong with skeleton server 💩 \nTry to rerun it (:")
+    end
 
 	  def ios?
 	    @platform == 'ios'
