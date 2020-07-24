@@ -11,3 +11,4 @@
 *.html
 !skeleton.html
 port
+/vendor/

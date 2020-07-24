@@ -173,11 +173,9 @@ class IOS < Base
 
   def check_bundle
     if @simulator
-      return if `xcrun simctl appinfo #{@udid} #{@bundle_id}`
-                    .include?("CFBundleName")
+      return if `xcrun simctl appinfo #{@udid} #{@bundle_id}`.include?("CFBundleName")
     else
-      return if `ideviceinstaller -u #{@udid} -l`
-                    .include?("#{@bundle_id},")
+      return if `ideviceinstaller -u #{@udid} -l`.include?("#{@bundle_id},")
     end
     Log.error("No such apps with bundle_id: #{@bundle_id}")
   end
