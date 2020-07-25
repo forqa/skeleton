@@ -1,0 +1,16 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.14.1
+ignore:
+  SNYK-RUBY-FILEUTILS-20077:
+    - '*':
+        reason: Symlink File Overwrite (file_utils.rb)
+  SNYK-RUBY-FILEUTILS-20078:
+    - '*':
+        reason: Directory Hijacking
+  SNYK-RUBY-FILEUTILS-20079:
+    - '*':
+        reason: Arbitrary Command Execution (/lib/file_utils/open_office.rb)
+  SNYK-RUBY-FILEUTILS-20081:
+    - '*':
+        reason: Arbitrary Command Execution (file_utils.rb)
+patch: {}
